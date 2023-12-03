@@ -28,9 +28,16 @@ url: "" # the base hostname & protocol for your site, e.g. http://example.com
 github_username:  raymondadouglas
 
 # Build settings
-theme: jekyll-theme-minimal
+theme: minima
 plugins:
   - jekyll-feed
+
+minima:
+  skin: solarized-dark
+
+header_pages:
+  - index.markdown
+  - about.markdown
 
 # Exclude from processing.
 # The following items will not be processed, by default.
