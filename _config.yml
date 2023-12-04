@@ -32,12 +32,13 @@ theme: minima
 plugins:
   - jekyll-feed
 
-minima:
-  skin: solarized-dark
 
 header_pages:
   - index.markdown
   - about.markdown
+
+include:
+  - _assets
 
 # Exclude from processing.
 # The following items will not be processed, by default.
