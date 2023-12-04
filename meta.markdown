@@ -1,12 +1,8 @@
 ---
-layout: post
+layout: page
 title: "Meta"
-date: 2023-12-03
 ---
 
-
-Meta
-====
 
 
 What is this site?
