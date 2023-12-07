@@ -32,6 +32,7 @@ remote_theme: pages-themes/primer@v0.6.0
 plugins:
 - jekyll-remote-theme # add this line to the plugins list if you already have one
 - jekyll-feed
+- jekyll-toc
 
 
 header_pages:
@@ -41,6 +42,8 @@ header_pages:
 
 include:
   - _assets
+
+
 
 # Exclude from processing.
 # The following items will not be processed, by default.
@@ -61,3 +64,4 @@ include:
 #   - vendor/cache/
 #   - vendor/gems/
 #   - vendor/ruby/
+

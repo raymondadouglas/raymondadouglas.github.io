@@ -8,4 +8,9 @@ title: "Welcome!"
 
 You've found my weblog^. Feel free to look around, and do say [hello](mailto:raymondadouglas@gmail.com).
 
-Further down you'll find some things that interest me, that I've done, and that I recommend, as well as some opinions I have. If you're curious about why this site is like this, here is the meta post.
+Elsewhere you'll find more [about](/about) me and the site, and an [archive](/archive) of posts.
+
+A few that I particularly like are 
+- [reflections on my time writing plays](/2023/07/03/plays)
+- [my favourite eigenvectors](/2022/04/03/eigenvectors)
+- [things forbidden in the house of commons](/2022/01/03/parliament)

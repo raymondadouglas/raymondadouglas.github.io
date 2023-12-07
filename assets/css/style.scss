@@ -2,7 +2,29 @@
 ---
 
 @import "{{ site.theme }}";
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap');
 
 body {
-    background-color: #fff;
+    background-color: #fff4f4;
+}
+
+.markdown-body {
+    font-family: "Open Sans";
+}
+.container-lg {
+    max-width: 50em;
+}
+
+h1 {
+    font-variant: small-caps;
+}
+a {
+    color: inherit;
+    text-decoration: dotted underline #888;
+    transition:cubic-bezier(1, 0, 0, 1);
+    transition-duration: 0.2s;
+}
+a:hover {
+    color: #000;
+    text-decoration: dotted underline #000;
 }

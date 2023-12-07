@@ -31,6 +31,6 @@ categories:
 
 # %%
 # Example usage
-create_jekyll_post("Cognition Extenders")
+create_jekyll_post("Ethics")
 
 # %%

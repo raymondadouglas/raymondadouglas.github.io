@@ -5,8 +5,11 @@ title: "Highlights From \"Rules of
 date: 2022-01-03
 ---
 
-Rules are a wonderful insight into the things people would do if they weren't forbidden. In this case, the
- "[Rules of behaviour and courtesies in the House of Commons](https://www.parliament.uk/globalassets/documents/rules-of-behaviour.pdf)"
+I adore rulebooks, because they indicate which offenses had to be explicitly forbidden. They give you a bit of texture about the gap between what an organisation aspires to be, and what it risks becoming.
+
+Put another way, there wouldn't be a rule without an offender.
+
+We now turn our attention to the "[Rules of behaviour and courtesies in the House of Commons](https://www.parliament.uk/globalassets/documents/rules-of-behaviour.pdf)", which governs conduct in the UK's parliament.
 
 
 ### The Basics
