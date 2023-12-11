@@ -31,6 +31,6 @@ categories:
 
 # %%
 # Example usage
-create_jekyll_post("Ethics")
+create_jekyll_post("An actual holiday")
 
 # %%
