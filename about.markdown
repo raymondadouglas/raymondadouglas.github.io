@@ -24,7 +24,7 @@ Some opinions:
 - AI is probably the most important thing going on right now, and that there's a reasonable chance it will lead to a catastrophe
 - It is often useful to reason about the world in terms of incentive landscapes, and to ask how the 'preferences' of a group might differ from the preferences of its members
 - The part of the world I grew up in is having a crisis of faith: many structures that used to facilitate relationships have collapsed, been dismantled, or been outcompeted
-- There are _enormous_ to thinking carefully about what you want and then trying to do it, as opposed to roughly imitating whatever you see other people doing
+- There are _enormous_ gains to thinking carefully about what you want and then trying to do it, as opposed to roughly imitating whatever you see other people doing
 
 ## About the site
 

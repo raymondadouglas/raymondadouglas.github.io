@@ -8,12 +8,11 @@ toc: true
 
 ### Brief intro to eigenvectors
 
+Formally, for a given linear transformation, its eigenvectors are the vectors that get scaled up by a constant. A linear transformation is a way of mapping all the points in a space so that, if some points form a straight line in the original space, they'll be mapped to points that also form a line, and the point in the centre doesn't move. In 2 dimensions, the only linear transformations are combinations of stretching and rotating things. 
 
-I'm not going to tell you what an eigenvector is, mostly because [3Blue1Brown already did a better job](https://youtu.be/PFDu9oVAE-g).
+The eigenvectors here are basically the lines which start from the centre and are just stretched or squeezed by the transformation. So in fact, they're effectively also the lines along which you're doing the stretching. There's a good introduction [here by 3Blue1Brown](https://youtu.be/PFDu9oVAE-g) which covers the maths.
 
-
-On the other hand, if you know what an eigenvector is mathematically, but you're not sure what they're for, why
- they might be interesting, and cannot fathom why someone would actually find them aesthetically appealing, then allow me to oblige.
+But this post isn't an introduction to what eigenvectors _are_. It's about what they're for, why they might be interesting, and why someone (like me) would actually find them aesthetically appealing or, dare I say it, beautiful.
 
 
 ### 5 - The Earth's Axis
