@@ -6,6 +6,7 @@ layout: home
 title: "Welcome!"
 ---
 
+
 You've found my weblog^. Feel free to look around, and do say [hello](mailto:raymondadouglas@gmail.com).
 
 Elsewhere you'll find more [about](/about) me and the site, and an [archive](/archive) of posts.

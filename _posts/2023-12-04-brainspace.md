@@ -9,8 +9,10 @@ At the risk of overgeneralising, my biggest constraint is cognition. I think mor
 
 So I generally try to find ways to get more. Here are some that have worked very well for me. They are all highly recommended.
 
+Health warning: The point of more brainspace is not to max out your productivity. It is generally good to be more productive, but you will get better things done if you keep [slack](https://thezvi.wordpress.com/2017/09/30/slack/) and absorb the fact that [pain is not the unit of effort](https://www.lesswrong.com/posts/bx3gkHJehRCYZAF3r/pain-is-not-the-unit-of-effort). I believe posts like those two have both made me more productive and given me a more rich and fulfilling life.
+
 ### To do lists
-I hate hate hate keeping track of all the things I'm meant to be doing at some point. It's so bad relying on your brain to remind you that you need to finish some code, reply to a message, wish someone a happy birthday, and do your laundry, plus you need to fill in a form.
+I hate hate hate keeping track of all the things I'm meant to be doing at some point. It's so bad relying on your brain to randomly remind you that you need to finish some code, reply to a message, wish someone a happy birthday, and do your laundry, plus you need to fill in a form.
 
 __So I have a notion doc called 'Things To Do' with a bunch of checkboxes. It's very lightweight - when I have something to do, I put it down, and then I don't have to worry about forgetting.__
 

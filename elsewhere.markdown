@@ -18,4 +18,4 @@ I have a [github](github.com/raymondadouglas) but all the repos are private exce
 
 Other than messaging services I don't use other social media, although sadly I do have a linkedin.
 
-There's also a very defunct facebook where you'll find a post I made in secondary school that somehow got tens of thousands of comments, and some videos of me before my voice broke. It's a strange thing to grow up on platforms that cycle in and out of use.
+There's also a very defunct facebook where you might be able to find most of the extant recordings of me before my voice broke. It's a strange thing to grow up on platforms that cycle in and out of use.

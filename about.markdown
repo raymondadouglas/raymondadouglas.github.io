@@ -18,7 +18,7 @@ Over the past few years my main interests have been:
 - **Music**, mostly in the form of little singalongs, and mostly the guitar or the ukulele, although I dabble in the harmonica
 - **Drifting**, which for me has meant usually not staying in one country for more than six months, although that seems to be changing
 
-### But who are you really
+### "But who are you really?"
 
 Some opinions:
 - AI is probably the most important thing going on right now, and that there's a reasonable chance it will lead to a catastrophe
