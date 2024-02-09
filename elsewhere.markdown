@@ -12,7 +12,7 @@ I have a smattering of LessWrong posts: the two I would recommend are [this scra
 
 ### Other places
 
-I have a [github](github.com/raymondadouglas) but all the repos are private except for this site itself
+I have a [github](https://www.github.com/raymondadouglas) but all the repos are private except for this site itself
 
 ### Social Media
 

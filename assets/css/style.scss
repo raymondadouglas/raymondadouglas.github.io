@@ -2,7 +2,7 @@
 ---
 
 @import "{{ site.theme }}";
-@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;500&display=swap');
 
 body {
     background-color: #fff4f4;
@@ -10,14 +10,22 @@ body {
 
 .markdown-body {
     font-family: "Open Sans";
+    font-weight: 300;
 }
 .container-lg {
     max-width: 50em;
 }
 
-h1 {
+.markdown-body h1 {
     font-variant: small-caps;
+    border-bottom-color: #9b9b9b;
 }
+
+.footer {
+    border-top: 1px solid #9b9b9b;
+    padding-top: 1em;
+}
+
 a {
     color: inherit;
     text-decoration: dotted underline #888;
@@ -27,4 +35,10 @@ a {
 a:hover {
     color: #000;
     text-decoration: dotted underline #000;
+}
+
+.home-image {
+    float: right;
+    width: 200px;
+    display:none;
 }

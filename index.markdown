@@ -6,6 +6,7 @@ layout: home
 title: "Welcome!"
 ---
 
+<img src="/images/moi.jpg" class="home-image">
 
 You've found my weblog^. Feel free to look around, and do say [hello](mailto:raymondadouglas@gmail.com).
 
