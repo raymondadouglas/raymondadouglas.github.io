@@ -2,7 +2,6 @@
 import datetime
 import os
 
-# %%
 def create_jekyll_post(title):
     # Format the current date
     date_str = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -29,8 +28,8 @@ categories:
 
     return f"Jekyll post created: {file_name}"
 
-# %%
+
 # Example usage
-create_jekyll_post("Travel tips")
+create_jekyll_post("The great superagent")
 
 # %%
