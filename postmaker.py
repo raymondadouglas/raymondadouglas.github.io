@@ -30,6 +30,6 @@ categories:
 
 
 # Example usage
-create_jekyll_post("The great superagent")
+create_jekyll_post("February Roundup")
 
 # %%

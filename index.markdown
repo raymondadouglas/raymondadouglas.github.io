@@ -2,7 +2,7 @@
 # Feel free to add content and custom Front Matter to this file.
 # To modify the layout, see https://jekyllrb.com/docs/themes/#overriding-theme-defaults
 
-layout: home
+layout: archive
 title: "Welcome!"
 ---
 
@@ -16,3 +16,7 @@ A few that I particularly like are
 - [reflections on my time writing plays](/2023/07/03/plays)
 - [my favourite eigenvectors](/2022/04/03/eigenvectors)
 - [things forbidden in the house of commons](/2022/01/03/parliament)
+
+---
+
+## Archive
