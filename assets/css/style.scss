@@ -6,11 +6,19 @@
 
 body {
     background-color: #fff4f4;
+    display: flex;
+    justify-content: center;
 }
 
 .markdown-body {
     font-family: "Open Sans";
     font-weight: 300;
+    background-color: #fff;
+    border-radius: 0.5em;
+    padding-top: 1em;
+    padding-bottom: 1em;
+    margin-left: 1em;
+    margin-right: 1em;
 }
 .container-lg {
     max-width: 50em;

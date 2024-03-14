@@ -10,6 +10,93 @@
     {% include head-custom.html %}
   </head>
   <body>
+    <canvas id="waveCanvas"></canvas>
+    <style>
+      #waveCanvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1; /* Ensures it stays behind your content */
+        background-color: #fff4f4; /* Matches your current background */
+      }
+    </style>
+
+<script>
+  const canvas = document.getElementById('waveCanvas');
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  let stars = []; // Array to hold our stars
+  const layers = 5; // Number of star layers
+  const numStarsPerLayer = canvas.width; // Adjust the density of stars here
+
+  let lastScrollY = window.scrollY; // Track the last scroll position
+
+  function createStars() {
+    stars = [];
+    for (let i = 0; i < layers; i++) {
+      let layerStars = [];
+      for (let j = 0; j < numStarsPerLayer; j++) {
+        const star = {
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          radius: Math.random() * 3 / i,
+          layer: i + 1 // Layers start at 1
+        };
+        layerStars.push(star);
+      }
+      stars.push(layerStars);
+    }
+  }
+
+  function drawStars() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    stars.forEach(layer => {
+      layer.forEach(star => {
+        ctx.beginPath();
+        ctx.arc(star.x, (star.y + canvas.height) % canvas.height, star.radius, 0, 2 * Math.PI);
+        ctx.fillStyle = '#24292e';
+        ctx.fill();
+      });
+    });
+  }
+
+  function updateStarPositions() {
+    const currentScrollY = window.scrollY;
+    const scrollDifference = currentScrollY - lastScrollY;
+
+    stars.forEach((layer, index) => {
+      const layerSpeed = 1/(index+1); // Adjust the parallax speed here
+      layer.forEach(star => {
+        star.y -= scrollDifference * layerSpeed; // Move stars in opposite direction of scroll
+      });
+    });
+
+    lastScrollY = currentScrollY; // Update last scroll position
+    drawStars();
+  }
+
+  // Handle canvas resizing
+  window.addEventListener('resize', () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    createStars();
+    drawStars();
+  });
+
+  // Update star positions on scroll
+  window.addEventListener('scroll', updateStarPositions);
+
+  createStars();
+  drawStars();
+
+</script>
+
+
+
     <div class="container-lg px-3 my-5 markdown-body">
       {% if site.title and site.title != page.title %}
       <h1><a href="{{ "/" | absolute_url }}">{{ site.title }}</a></h1>
