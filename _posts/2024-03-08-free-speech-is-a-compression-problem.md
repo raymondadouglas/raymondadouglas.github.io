@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  Free speech is a compression problem
+title:  Free Speech is a Compression Problem
 date:   2024-03-08 14:03:12
 categories: 
 ---
