@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  March Roundup
-date:   2024-04-06 13:43:45
+date:   2024-04-05 13:43:45
 categories: 
 ---
 
@@ -14,11 +14,11 @@ This reddit post asking ['What is currently in it's "Golden age", but not enough
 
 Three random clumps of high-density advice, from [Patrick McKenzie](https://twitter.com/patio11/status/936615043126370306) again, [Ben Kuhn](https://twitter.com/benskuhn/status/1407497217066291208), and [Dynomight](https://dynomight.net/things/). I find lists like these are an easy way to waste time, but very helpful for snapping me out of a malaise by surfacing specific things I could be doing better.
 
-## Leadership
+### Leadership
 
 I spent a lot of last month thinking about leadership, and how to do it well. By far the best resource I encountered was the [Gitlab Handbook](https://handbook.gitlab.com/handbook/), which they very kindly made open-source, and which contains actual battle-tested guidelines on how they want employees to behave: everything from how to run meetings to how to create space for feedback. Not all of it transfers, but there's a lot to learn. I also enjoyed this piece on [regular check-ins with direct reports](https://randsinrepose.com/archives/the-update-the-vent-and-the-disaster/) and this piece on [how bad management relationships can spiral](https://hbr.org/1998/03/the-set-up-to-fail-syndrome). ht/ Daniel for all of these.
 
-## Stories
+### Stories
 
 I finally read [Three Worlds Collide](https://robinhanson.typepad.com/files/three-worlds-collide.pdf): the start was a bit choppy and the use of rationalists as a kind of secret magic cult was a little jarring, but the core question was fantastic and as ever the ending was wonderfully executed.
 
@@ -26,7 +26,7 @@ Relatedly, here's Scott Alexander writing what I believe to be the [first great 
 
 Finally, I have at last started reading Hyperbole and a Half, which gives the most faithful description I've ever seen of [what depression is like](https://hyperboleandahalf.blogspot.com/2013/05/depression-part-two.html).
 
-## Difficult things to chew on
+### Difficult things to chew on
 
 tw abortion and suffering: I found [this piece](https://forum.effectivealtruism.org/posts/vhKZ7hyzmcrWuBwDL/the-scale-of-fetal-suffering-in-late-term-abortions) on the use of anaesthetics in abortion very thought-provoking. It's not something I can neatly slot into my worldview, which is always a good sign.
 
@@ -34,7 +34,7 @@ On a similar note, I've been trying to make sense of what it actually means that
 
 And on a different note, here is [The Case for Marrying an Older Man](https://archive.is/ijZ5m).
 
-## Wikipedia Pages
+### Wikipedia Pages
 
 The [Braitenberg Vehicle](https://en.wikipedia.org/wiki/Braitenberg_vehicle) is a nice example of something where it's hard to say how much of an agent it is. It seems to exhibit complex behaviour despite having a really simple internal structure (ht/ Daniel Polani).
 
