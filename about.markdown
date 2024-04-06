@@ -32,7 +32,7 @@ It's a nice easy Jekyll site on Github Pages. I tweak the css a bit, I write lit
 
 ### Aesthetics
 
-I'm going with minimalism. This is basically the [default primer theme](https://github.com/pages-themes/primer), but I tinted the background a little and replaced blue links with dotted underlines that darken when you hover over them.
+I'm going with minimalism. This is basically the [default primer theme](https://github.com/pages-themes/primer), but I tinted the background a little and replaced blue links with dotted underlines that darken when you hover over them. I also decided to add a parallax dot effect in the background, because I wanted the site to feel slightly more distinct.
 
 ### A Brief History
 
