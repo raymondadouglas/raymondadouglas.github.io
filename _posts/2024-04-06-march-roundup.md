@@ -6,9 +6,9 @@ categories:
 ---
 
 
-I'm a sucker for careful descriptions of the messy incentives that lead to current equilibria, unpicking why the current world actually makes a lot of sense, and this month I enjoyed Byrne Hobart's explanation of [why airlines end up charging fees for everything](https://www.thediff.co/archive/exposed-your-torrid-love-affair-with-airline-fees/?ref=the-diff-newsletter) as well as Patrick McKenzie's discussion of [how financial systems accommodate various holidays across the world](https://www.bitsaboutmoney.com/archive/financial-systems-take-a-holiday/)
+I'm a sucker for careful descriptions of the messy incentives that lead to current equilibria, unpicking why the current world actually makes a lot of sense, and this month I enjoyed Byrne Hobart's explanation of [why airlines end up charging fees for everything](https://www.thediff.co/archive/exposed-your-torrid-love-affair-with-airline-fees/?ref=the-diff-newsletter) as well as Patrick McKenzie's discussion of [how financial systems accommodate various holidays across the world](https://www.bitsaboutmoney.com/archive/financial-systems-take-a-holiday/).
 
-Speaking of the hidden complexities of the world, here's a deep dive including x ray scans on [how Heinz makes ketchup lids](https://www.lumafield.com/article/heinzs-sustainable-ketchup-cap)
+Speaking of the hidden complexities of the world, here's a deep dive including x ray scans on [how Heinz makes ketchup lids](https://www.lumafield.com/article/heinzs-sustainable-ketchup-cap).
 
 This reddit post asking ['What is currently in it's "Golden age", but not enough people know about it?'](https://old.reddit.com/r/AskReddit/comments/1b0vp0e/what_is_currently_in_its_golden_age_but_not/) was a nice glimpse into the complexity of the world. The most persuasive answers were knitting, keyboards, and astronomy.
 
