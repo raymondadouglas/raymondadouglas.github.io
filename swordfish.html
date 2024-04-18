@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+<html lang="{{ page.lang | default: site.lang | default: "en-US" }}">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>swordfish</title>
+    <link
+        href='https://fonts.googleapis.com/css?family=Roboto+Mono:400,100,300,100italic,300italic,400italic,500,500italic,700,700italic'
+        rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Plaster' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+    <style>
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        #mainCanvas {
+            width: 100%;
+            height: 100%;
+            position: fixed;
+            left: 0;
+            top: 0;
+        }
+
+        #backCanvas {
+            width: 100%;
+            height: 100%;
+            position: fixed;
+            left: 0;
+            top: 0;
+        }
+
+        #pauseButton {
+            font-size: 6vh;
+            position: fixed;
+            top: 1vh;
+            right: 1vh;
+            color: #1F1F1F;
+            cursor: pointer;
+        }
+
+        #pauseButton:hover {
+            text-shadow: 0 0 1vh rgba(0, 0, 0, 0.5);
+        }
+
+        #playMenu {
+            z-index: 10;
+            position: fixed;
+            width: 70vh;
+            height: 54vh;
+            top: -55vh;
+            left: 50vw;
+            margin-left: -35vh;
+            border-radius: 1vh;
+            background-color: #FFFFFF;
+            -webkit-box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.5);
+            box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.5);
+            text-align: center;
+            padding: 2vh;
+            box-sizing: border-box;
+            font-size: 6vh;
+            transition: top 0.3s ease-in;
+        }
+
+        #playMenu.menuOn {
+            top: 23vh;
+        }
+
+        #pauseMenu {
+            z-index: 10;
+            position: fixed;
+            width: 40vw;
+            height: 40vh;
+            top: -55vh;
+            left: 30vw;
+            border-radius: 1vh;
+            background-color: #FFFFFF;
+            -webkit-box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.5);
+            box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.5);
+            text-align: center;
+            padding: 2vh;
+            box-sizing: border-box;
+            font-size: 6vh;
+            transition: top 0.3s ease-in;
+        }
+
+        #pauseMenu.menuOn {
+            top: 30vh;
+        }
+
+        #menuTitle {
+            font-size: 8vh;
+            font-family: Roboto Mono;
+            font-weight: 700;
+            color: #1F1F1F;
+        }
+
+        .optionTitle {
+            font-size: 2vh;
+            font-family: Roboto Mono;
+            font-weight: 400;
+        }
+
+        .numOption {
+            font-family: Roboto Mono;
+            font-weight: 400;
+        }
+
+        .optionButton {
+            color: #AAAAAA;
+            cursor: pointer;
+            margin: 0 2vh;
+        }
+
+        .optionButton:hover {
+            color: #1F1F1F;
+        }
+
+        .menuButton {
+            margin: 2vh auto 0 auto;
+            width: 20vh;
+            height: 7vh;
+            padding: 1vh;
+            font-size: 5vh;
+            border-radius: 4px;
+            border: 1px solid #1F1F1F;
+            background-color: #FFFFFF;
+            color: #1F1F1F;
+            font-family: Roboto Mono;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .menuButton:hover {
+            background-color: #1F1F1F;
+            color: #FFFFFF;
+        }
+
+        #countdown {
+            font-size: 40vh;
+            top: 23vh;
+            position: fixed;
+            width: 100%;
+            text-align: center;
+            font-family: Roboto Mono;
+            font-weight: 700;
+            color: #1F1F1F;
+            opacity: 1;
+            transition: opacity 0.3s ease;
+        }
+
+        .gone {
+            display: none;
+        }
+
+        .menuTable {
+            margin: 2vh auto 3vh auto;
+            border-spacing: 0;
+            text-align: center;
+        }
+
+        .menuTableRB {
+            padding-right: 4vh;
+            border-right: 1px solid #CCCCCC;
+        }
+
+        .menuTableLB {
+            padding-left: 4vh;
+            border-left: 1px solid #CCCCCC;
+        }
+
+        .menuTableTB {
+            padding-top: 1vh;
+            border-top: 1px solid #CCCCCC;
+        }
+
+        .menuTableBB {
+            padding-bottom: 1vh;
+            border-bottom: 1px solid #CCCCCC;
+        }
+
+        .optionCheck {
+            color: #AAAAAA;
+            cursor: pointer;
+        }
+
+        .optionCheck:hover {
+            color: #1F1F1F;
+        }
+
+        .optionCheck.dark {
+            color: #1F1F1F;
+        }
+
+        .keyIndicator {
+            width: 6vh;
+            height: 6vh;
+            background-color: blue;
+            color: #FFFFFF;
+            font-size: 4.2vh;
+            text-align: center;
+            border-radius: 1vh;
+            position: fixed;
+            font-family: Roboto Mono;
+            margin-left: -3vh;
+            margin-top: -3vh;
+            transition: opacity 0.3s ease;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="backCanvas"></canvas>
+    <canvas id="mainCanvas"></canvas>
+
+    <div id="playMenu" class="menuOn">
+        <div id="menuTitle">swordfish</div>
+
+        <table class="menuTable">
+            <tr>
+                <td class="menuTableRB menuTableBB">
+                    <div class="optionTitle">players</div>
+                    <i class="fa fa-minus optionButton" id="playersMinus"></i> <span class="numOption"
+                        id="players">2</span> <i class="fa fa-plus optionButton" id="playersPlus"></i>
+                </td>
+                <td class="menuTableLB menuTableBB">
+                    <div class="optionTitle">bots</div>
+                    <i class="fa fa-minus optionButton" id="botsMinus"></i> <span class="numOption" id="bots">0</span>
+                    <i class="fa fa-plus optionButton" id="botsPlus"></i>
+                </td>
+            </tr>
+            <tr>
+                <td class="menuTableRB menuTableTB">
+                    <div class="optionTitle">bot skill</div>
+                    <i class="fa fa-minus optionButton" id="botSkillMinus"></i> <span class="numOption"
+                        id="botSkill">1</span> <i class="fa fa-plus optionButton" id="botSkillPlus"></i>
+                </td>
+                <td class="menuTableLB menuTableTB">
+                    <div class="optionTitle">wrap edges</div>
+                    <i class="fa fa-check-circle optionCheck dark" id="wrapEdgesCheck"></i>
+                </td>
+            </tr>
+        </table>
+
+        <div class="menuButton" id="startButton">start</div>
+    </div>
+
+    <div id="pauseMenu">
+        <div id="menuTitle">paused</div>
+        <div class="menuButton" id="resumeButton">resume</div>
+        <div class="menuButton" id="restartButton">restart</div>
+    </div>
+
+    <i class="fa fa-pause gone" id="pauseButton"></i>
+
+    <div id="keyIndicatorHolder"></div>
+
+    <div id="countdown"></div>
+
+    <script>
+        var pauseButton = document.getElementById("pauseButton");
+        var playMenu = document.getElementById("playMenu");
+        var pauseMenu = document.getElementById("pauseMenu");
+
+        var resumeButton = document.getElementById("resumeButton");
+        var restartButton = document.getElementById("restartButton");
+
+        var mainCanvas = document.getElementById("mainCanvas");
+        var mainContext = mainCanvas.getContext("2d");
+
+        var backCanvas = document.getElementById("backCanvas");
+        var backContext = backCanvas.getContext("2d");
+
+        mainCanvas.width = mainCanvas.offsetWidth;
+        mainCanvas.height = mainCanvas.offsetHeight;
+        backCanvas.width = backCanvas.offsetWidth;
+        backCanvas.height = backCanvas.offsetHeight;
+
+        window.onresize = function () {
+            mainCanvas.width = mainCanvas.offsetWidth;
+            mainCanvas.height = mainCanvas.offsetHeight;
+            backCanvas.width = backCanvas.offsetWidth;
+            backCanvas.height = backCanvas.offsetHeight;
+        }
+
+        var radius = 5;
+        var healthgap = 8;
+        var healththickness = 3;
+        var arrowsize = 25;
+
+        var powerupRadius = 30;
+
+        var players = [];
+
+        var colSet = ['#00A6FF', '#30FF30', '#FF1919', '#FFAE00', '#FF38FC', '#822EFF', '#00FFC8', '#FFEE00'];
+        var keySet = [[37, 39], [90, 88], [84, 89], [66, 78], [49, 50], [79, 80], [67, 86], [81, 87], [75, 76], [65, 83], [51, 52], [71, 72], [57, 48], [68, 70], [85, 73], [53, 54], [69, 82], [55, 56], [74, 77]];
+        //Keys: Lt/Rt, Z/X, T/Y, B/N, 1/2, O/P, C/V, Q/W, K/L, A/S, 3/4, G/H, 9/0, D/F, U/I, 5/6, E/R, 7/8, J/M 
+        var players = [];
+        var bots = [];
+
+        function stringToKeyCode(s) {
+            switch (s) {
+                case "left":
+                    return 37;
+                    break;
+                case "right":
+                    return 39;
+                    break;
+                default:
+                    return s.charCodeAt(0);
+                    break;
+            }
+        }
+
+        function keyCodeToString(c) {
+            switch (c) {
+                case 37:
+                    return "&#x25c0;";
+                    break;
+                case 39:
+                    return "&#x25b6;";
+                    break;
+                default:
+                    return String.fromCharCode(c);
+                    break;
+            }
+        }
+
+        var paused = true;
+
+        var debris = [];
+
+        var keysDown = {};
+
+        var boardPowerups = [];
+
+        var wrapEdges = true;
+
+        function explosion(x, y, speed, density, size, color) {
+            for (var i = 0; i < density; i++) {
+                var d = Math.random() * 2 * Math.PI;
+                var vX = Math.sin(d) * speed * Math.random();
+                var vY = Math.cos(d) * speed * Math.random();
+                var shape = [];
+                shape.push(Math.random() * size);
+                shape.push(Math.random() * -size);
+                shape.push(Math.random() * size);
+                shape.push(Math.random() * size);
+                shape.push(Math.random() * -size);
+                shape.push(Math.random() * size);
+                shape.push(Math.random() * -size);
+                shape.push(Math.random() * -size);
+                debris.push([x, y, vX, vY, shape, color, 1]);
+            }
+        }
+
+        function updateDebris() {
+            var newDebris = [];
+            for (var i = 0; i < debris.length; i++) {
+                debris[i][0] += debris[i][2];
+                debris[i][1] += debris[i][3];
+                debris[i][2] /= 1.05;
+                debris[i][3] /= 1.05;
+                debris[i][6] -= 0.015;
+                if (debris[i][6] >= 0) {
+                    newDebris.push(debris[i]);
+                }
+            }
+            debris = newDebris;
+        }
+
+        function drawDebris() {
+            for (var i = 0; i < debris.length; i++) {
+                var d = debris[i];
+                mainContext.fillStyle = d[5];
+                mainContext.globalAlpha = d[6];
+                mainContext.beginPath();
+                mainContext.moveTo(d[0] + d[4][0], d[1] + d[4][1]);
+                mainContext.lineTo(d[0] + d[4][2], d[1] + d[4][3]);
+                mainContext.lineTo(d[0] + d[4][4], d[1] + d[4][5]);
+                mainContext.lineTo(d[0] + d[4][6], d[1] + d[4][7]);
+                mainContext.fill();
+                mainContext.globalAlpha = 1;
+            }
+        }
+
+        function drawBoardPowerups() {
+            for (var i = 0; i < boardPowerups.length; i++) {
+                var x = boardPowerups[i][1];
+                var y = boardPowerups[i][2];
+                mainContext.fillStyle = "#1F1F1F";
+                mainContext.beginPath();
+                mainContext.arc(x, y, powerupRadius, 0, Math.PI * 2);
+                mainContext.fill();
+                mainContext.fillStyle = "#FFFFFF";
+                mainContext.textAlign = "center";
+                mainContext.textBaseline = "middle";
+                mainContext.font = (powerupRadius / 2.5) + "px 'Roboto Mono'";
+                switch (boardPowerups[i][0]) {
+                    case 0:
+                        mainContext.fillText("long", x, y - powerupRadius / 4);
+                        mainContext.fillText("sword", x, y + powerupRadius / 4);
+                        break;
+                    case 1:
+                        mainContext.fillText("short", x, y - powerupRadius / 4);
+                        mainContext.fillText("sword", x, y + powerupRadius / 4);
+                        break;
+                    case 2:
+                        mainContext.fillText("speed", x, y - powerupRadius / 4);
+                        mainContext.fillText("boost", x, y + powerupRadius / 4);
+                        break;
+                    case 3:
+                        mainContext.fillText("ultra", x, y - powerupRadius / 4);
+                        mainContext.fillText("slow", x, y + powerupRadius / 4);
+                        break;
+                }
+            }
+        }
+
+        function drawPlayer(p) {
+            backContext.strokeStyle = p.color;
+            backContext.lineWidth = 1;
+            backContext.beginPath();
+            backContext.moveTo(p.X, p.Y);
+            backContext.lineTo(p.X + p.vX * p.l, p.Y + p.vY * p.l);
+            backContext.stroke();
+
+            backContext.fillStyle = p.color;
+            backContext.beginPath();
+            backContext.arc(p.X, p.Y, radius, 0, Math.PI * 2);
+            backContext.fill();
+
+            mainContext.fillStyle = p.color;
+            mainContext.beginPath();
+            mainContext.arc(p.X, p.Y, radius, 0, Math.PI * 2);
+            mainContext.fill();
+
+            //health
+            mainContext.strokeStyle = p.color;
+            mainContext.lineWidth = healththickness;
+            mainContext.beginPath();
+            mainContext.arc(p.X, p.Y, radius + healthgap + (healththickness / 2), 0, Math.PI * 2 * p.health);
+            mainContext.stroke();
+
+            for (var i = 0; i < p.powerups.length; i++) {
+
+            }
+
+            //arrows
+            if (p.X < -radius) {
+                if (p.Y > 0) {
+                    if (p.Y < mainCanvas.height) {
+                        mainContext.beginPath();
+                        mainContext.moveTo(0, p.Y);
+                        mainContext.lineTo(arrowsize, p.Y - arrowsize);
+                        mainContext.lineTo(arrowsize, p.Y + arrowsize);
+                        mainContext.closePath();
+                        mainContext.fill();
+                    } else {
+                        mainContext.beginPath();
+                        mainContext.moveTo(0, mainCanvas.height);
+                        mainContext.lineTo(Math.sqrt(2) * arrowsize, mainCanvas.height);
+                        mainContext.lineTo(0, mainCanvas.height - Math.sqrt(2) * arrowsize);
+                        mainContext.closePath();
+                        mainContext.fill();
+                    }
+                } else {
+                    mainContext.beginPath();
+                    mainContext.moveTo(0, 0);
+                    mainContext.lineTo(Math.sqrt(2) * arrowsize, 0);
+                    mainContext.lineTo(0, Math.sqrt(2) * arrowsize);
+                    mainContext.closePath();
+                    mainContext.fill();
+                }
+            } else {
+                if (p.X < mainCanvas.width) {
+                    if (p.Y < -radius) {
+                        mainContext.beginPath();
+                        mainContext.moveTo(p.X, 0);
+                        mainContext.lineTo(p.X + arrowsize, arrowsize);
+                        mainContext.lineTo(p.X - arrowsize, arrowsize);
+                        mainContext.closePath();
+                        mainContext.fill();
+                    } else if (p.Y > mainCanvas.height + radius) {
+                        mainContext.beginPath();
+                        mainContext.moveTo(p.X, mainCanvas.height);
+                        mainContext.lineTo(p.X + arrowsize, mainCanvas.height - arrowsize);
+                        mainContext.lineTo(p.X - arrowsize, mainCanvas.height - arrowsize);
+                        mainContext.closePath();
+                        mainContext.fill();
+                    }
+                } else {
+                    if (p.Y < 0) {
+                        mainContext.beginPath();
+                        mainContext.moveTo(mainCanvas.width, 0);
+                        mainContext.lineTo(mainCanvas.width - Math.sqrt(2) * arrowsize, 0);
+                        mainContext.lineTo(mainCanvas.width, Math.sqrt(2) * arrowsize);
+                        mainContext.closePath();
+                        mainContext.fill();
+                    } else if (p.Y < mainCanvas.height + radius) {
+                        mainContext.beginPath();
+                        mainContext.moveTo(mainCanvas.width, p.Y);
+                        mainContext.lineTo(mainCanvas.width - arrowsize, p.Y - arrowsize);
+                        mainContext.lineTo(mainCanvas.width - arrowsize, p.Y + arrowsize);
+                        mainContext.closePath();
+                        mainContext.fill();
+                    } else {
+                        mainContext.beginPath();
+                        mainContext.moveTo(mainCanvas.width, mainCanvas.height);
+                        mainContext.lineTo(mainCanvas.width - Math.sqrt(2) * arrowsize, mainCanvas.height);
+                        mainContext.lineTo(mainCanvas.width, mainCanvas.height - Math.sqrt(2) * arrowsize);
+                        mainContext.closePath();
+                        mainContext.fill();
+                    }
+                }
+            }
+        }
+
+        function draw() {
+            backContext.fillStyle = "rgba(255,255,255,0.05)";
+            backContext.fillRect(0, 0, backCanvas.width, backCanvas.height);
+            mainContext.clearRect(0, 0, mainCanvas.width, mainCanvas.height);
+            for (var i = 0; i < players.length; i++) {
+                if (!players[i].dead) {
+                    drawPlayer(players[i]);
+                }
+            }
+            drawBoardPowerups();
+            drawDebris();
+            if (paused) {
+                mainContext.fillStyle = "rgba(255, 255, 255, 0.6)";
+                mainContext.fillRect(0, 0, mainCanvas.width, mainCanvas.height);
+            }
+        }
+
+        function powerupOn(p, t) {
+            p.powerups.push([t, 1000]);
+            switch (t) {
+                case 0:
+                    p.l *= 1.5; //extra-long sword
+                    break;
+                case 1:
+                    p.l /= 1.5; //short sword
+                    break;
+                case 2:
+                    p.V *= 2; //high speed
+                    break;
+                case 3:
+                    p.V /= 2; //low speed
+                    break;
+            }
+        }
+
+        function powerupOff(p, t) {
+            switch (t) {
+                case 0:
+                    p.l /= 1.5;
+                    break;
+                case 1:
+                    p.l *= 1.5;
+                    break;
+                case 2:
+                    p.V /= 2;
+                    break;
+                case 3:
+                    p.V *= 2;
+                    break;
+            }
+        }
+
+        function updatePowerups(p) {
+            var newBoardPowerups = [];
+            for (var i = 0; i < boardPowerups.length; i++) {
+                var dX = boardPowerups[i][1] - p.X;
+                var dY = boardPowerups[i][2] - p.Y;
+                if ((dX * dX) + (dY * dY) < (powerupRadius + radius) * (powerupRadius + radius)) {
+                    powerupOn(p, boardPowerups[i][0]);
+                    explosion(boardPowerups[i][1], boardPowerups[i][2], 4, 100, 7, "#1F1F1F");
+                } else {
+                    newBoardPowerups.push(boardPowerups[i]);
+                }
+            }
+            boardPowerups = newBoardPowerups;
+
+            var newPowerups = []
+            for (var i = 0; i < p.powerups.length; i++) {
+                p.powerups[i][1] -= 1;
+                if (p.powerups[i][1] <= 0) {
+                    powerupOff(p, p.powerups[i][0]);
+                } else {
+                    newPowerups.push(p.powerups[i]);
+                }
+            }
+            p.powerups = newPowerups;
+        }
+
+        function addRandomPowerup() {
+            //	boardPowerups.push([Math.floor(Math.random() * 4), Math.random() * mainCanvas.width, Math.random() * mainCanvas.height]);
+        }
+
+        function updatePlayer(p) {
+            updatePowerups(p);
+            p.D += (keysDown[p.keys[0]] ? 0.05 : 0);
+            p.D -= (keysDown[p.keys[1]] ? 0.05 : 0);
+            var oX = Math.sin(p.D) * p.V;
+            var oY = Math.cos(p.D) * p.V;
+            p.vX += oX;
+            p.vY += oY;
+            p.vY += p.G;
+            p.X += p.vX;
+            p.Y += p.vY;
+            //	if(p.X < radius || p.X > mainCanvas.width + radius || p.Y < radius || p.Y > mainCanvas.height + radius){
+            //		p.health -= 0.05;
+            //	}
+            p.vX /= 1.05;
+            p.vY /= 1.05;
+            if (wrapEdges) {
+                if (p.X < 0) {
+                    p.X += mainCanvas.width;
+                }
+                if (p.Y < 0) {
+                    p.Y += mainCanvas.height;
+                }
+                if (p.X > mainCanvas.width) {
+                    p.X -= mainCanvas.width;
+                }
+                if (p.Y > mainCanvas.height) {
+                    p.Y -= mainCanvas.height;
+                }
+            }
+        }
+
+        function checkKill(k, v) {
+            var a = k.X;
+            var b = k.Y;
+            var c = k.X + k.vX * k.l;
+            var d = k.Y + k.vY * k.l;
+            var e = v.X;
+            var f = v.Y;
+            var r = radius;
+
+            var m = (d - b) / (c - a);
+            var i = b - (m * a);
+
+            var qa = (m * m) + 1;
+            var qb = (2 * m * (i - f)) - (2 * e);
+            var qc = ((i - f) * (i - f)) + (e * e) - (r * r);
+
+            var qd = (qb * qb) - (4 * qa * qc);
+            if (qd < 0) {
+                return false;
+            }
+            var s1 = (-qb + Math.sqrt(qd)) / (2 * qa);
+            var s2 = (-qb - Math.sqrt(qd)) / (2 * qa);
+
+            if ((a <= s1 && s1 <= c) || (c <= s1 && s1 <= a) || (a <= s2 && s2 <= c) || (c <= s2 && s2 <= a)) {
+                return true;
+            }
+        }
+
+        function checkPlayerCollision(p1, p2) {
+            if (checkKill(p1, p2)) {
+                p2.health -= 0.05;
+                if (!p2.dying) {
+                    p2.dying = true;
+                    explosion(p2.X, p2.Y, 3, 20, 3, p2.color);
+                }
+                if (p2.health <= 0) {
+                    p2.dead = true;
+                    explosion(p2.X, p2.Y, 4, 100, 7, p2.color);
+                }
+            } else {
+                p2.dying = false;
+            }
+        }
+
+        function update() {
+            window.requestAnimationFrame(update);
+            if (!paused) {
+                if (Math.random() < 0.1) {
+                    if (boardPowerups.length < 4) {
+                        addRandomPowerup();
+                    }
+                }
+                for (var i = 0; i < players.length; i++) {
+                    if (!players[i].dead) {
+                        updatePlayer(players[i]);
+                        for (var c = 0; c < players.length; c++) {
+                            if (c != i && !players[c].dead) {
+                                checkPlayerCollision(players[i], players[c]);
+                            }
+                        }
+                    }
+                }
+                var count = 0;
+                for (var i = 0; i < players.length; i++) {
+                    count += !players[i].dead;
+                }
+                if (count < 2) {
+                    paused = !paused;
+                    playMenu.className = "menuOn";
+                    backContext.fillStyle = "#FFFFFF";
+                    backContext.fillRect(0, 0, backCanvas.width, backCanvas.height);
+                    for (var i = 0; i < players.length; i++) {
+                        if (!players[i].dead) {
+                            playMenu.style.backgroundColor = players[i].color;
+                        }
+                    }
+                    mainContext.fillRect(0, 0, mainCanvas.width, mainCanvas.height);
+                    countdown.style.opacity = 1;
+                    players = [];
+                    bots = [];
+                    debris = [];
+                }
+                for (var i = 0; i < bots.length; i++) {
+                    botLogic(bots[i]);
+                }
+                updateDebris();
+            }
+            draw();
+        }
+
+        document.onkeydown = function (e) {
+            keysDown[e.keyCode] = true;
+        }
+
+        document.onkeyup = function (e) {
+            keysDown[e.keyCode] = false;
+        }
+
+        update();
+
+        resumeButton.onclick = function () {
+            paused = false;
+            pauseButton.className = "fa fa-pause";
+            pauseMenu.className = "";
+        }
+
+        restartButton.onclick = function () {
+            pauseMenu.className = "";
+            playMenu.className = "menuOn";
+            backContext.fillStyle = "#FFFFFF";
+            backContext.fillRect(0, 0, backCanvas.width, backCanvas.height);
+            countdown.style.opacity = 1;
+            players = [];
+            bots = [];
+            debris = [];
+        }
+
+        pauseButton.onclick = function () {
+            paused = !paused;
+            pauseButton.className = paused ? "gone" : "fa fa-pause";
+            pauseMenu.className = "menuOn";
+        }
+
+        var countdown = document.getElementById("countdown");
+
+        var playersMinus = document.getElementById("playersMinus");
+        var playersPlus = document.getElementById("playersPlus");
+        var botsMinus = document.getElementById("botsMinus");
+        var botsPlus = document.getElementById("botsPlus");
+        var botSkillMinus = document.getElementById("botSkillMinus");
+        var botSkillPlus = document.getElementById("botSkillPlus");
+        var wrapEdgesCheck = document.getElementById("wrapEdgesCheck");
+
+        var playersNum = document.getElementById("players");
+        var botsNum = document.getElementById("bots");
+        var botSkillNum = document.getElementById("botSkill");
+
+        var startButton = document.getElementById("startButton");
+
+
+
+        wrapEdgesCheck.onclick = function () {
+            wrapEdges = !wrapEdges;
+            if (wrapEdges) {
+                wrapEdgesCheck.className = "fa fa-check-circle optionCheck dark";
+            } else {
+                wrapEdgesCheck.className = "fa fa-circle-o optionCheck";
+            }
+        }
+
+        playersMinus.onclick = function () {
+            playersNum.innerHTML = (parseInt(playersNum.innerHTML) > 0 ? parseInt(playersNum.innerHTML) - 1 : 0);
+        }
+
+        playersPlus.onclick = function () {
+            playersNum.innerHTML = (parseInt(playersNum.innerHTML) < 10 ? parseInt(playersNum.innerHTML) + 1 : 10);
+        }
+
+        botsMinus.onclick = function () {
+            botsNum.innerHTML = (parseInt(botsNum.innerHTML) > 0 ? parseInt(botsNum.innerHTML) - 1 : 0);
+        }
+
+        botsPlus.onclick = function () {
+            botsNum.innerHTML = parseInt(botsNum.innerHTML) + 1;
+        }
+
+        botSkillMinus.onclick = function () {
+            botSkillNum.innerHTML = (parseInt(botSkillNum.innerHTML) > 1 ? parseInt(botSkillNum.innerHTML) - 1 : 1);
+        }
+
+        botSkillPlus.onclick = function () {
+            botSkillNum.innerHTML = (parseInt(botSkillNum.innerHTML) < 5 ? parseInt(botSkillNum.innerHTML) + 1 : 5);
+        }
+
+        function dropCountdown() {
+            if (parseInt(countdown.innerHTML) == 1) {
+                paused = false;
+                countdown.style.opacity = 0;
+                pauseButton.className = "fa fa-pause";
+                hideKeyIndicators();
+            } else {
+                countdown.innerHTML = parseInt(countdown.innerHTML) - 1;
+                window.setTimeout(dropCountdown, 1000);
+            }
+        }
+
+        var keyIndicatorHolder = document.getElementById("keyIndicatorHolder");
+
+        function hideKeyIndicators(r) {
+            var keyIndicators = keyIndicatorHolder.childNodes;
+            for (var i = 0; i < keyIndicators.length; i++) {
+                keyIndicators[i].style.opacity = 0;
+            }
+            if (r) {
+                keyIndicatorHolder.innerHTML = "";
+            } else {
+                window.setTimeout(function () { hideKeyIndicators(true) }, 300);
+            }
+        }
+
+        function showKeyIndicators() {
+            keyIndicatorHolder.innerHTML = "";
+            for (var i = 0; i < players.length - bots.length; i++) {
+                for (var k = 0; k < 2; k++) {
+                    var nKI = document.createElement("div");
+                    nKI.className = "keyIndicator";
+                    nKI.innerHTML = keyCodeToString(players[i].keys[k]);
+                    nKI.style.backgroundColor = players[i].color;
+                    var xO = (k - 0.5) * mainCanvas.height / 7;
+                    nKI.style.left = (players[i].X + xO) + "px";
+                    nKI.style.top = players[i].Y + "px";
+                    keyIndicatorHolder.appendChild(nKI);
+                }
+            }
+        }
+
+        startButton.onclick = function () {
+            var botNum = parseInt(botsNum.innerHTML);
+            var playerNum = parseInt(playersNum.innerHTML) + botNum;
+            var poisson = [];
+            while (poisson.length < playerNum) {
+                poisson = poissonDistribute(mainCanvas.width * 0.8, mainCanvas.height * 0.8, mainCanvas.width * 0.4, mainCanvas.height * 0.4, mainCanvas.height / 5, 30);
+                poisson.splice(0, 1);
+            }
+            while (poisson.length > playerNum) {
+                poisson.splice(Math.floor(Math.random() * poisson.length), 1);
+            }
+            console.log(playerNum);
+            for (i = 0; i < playerNum; i++) {
+                players.push({
+                    X: poisson[i][0] + mainCanvas.width * 0.1,
+                    Y: poisson[i][1] + mainCanvas.height * 0.1,
+                    health: 1,
+                    D: Math.random() * Math.PI * 2,
+                    vX: 0,
+                    vY: 0,
+                    V: 0.3,
+                    G: 0.1,
+                    color: colSet[i % colSet.length],
+                    keys: (i < playerNum - botNum ? keySet[i] : [-2 * i, -2 * i - 1]),
+                    l: 20,
+                    dying: false,
+                    dead: false,
+                    powerups: []
+                });
+            }
+            var botSkill = parseInt(botSkillNum.innerHTML);
+
+            for (i = playerNum - botNum; i < playerNum; i++) {
+                var target = Math.floor(Math.random() * playerNum);
+                while (target == i) {
+                    target = Math.floor(Math.random() * playerNum);
+                }
+                bots.push({
+                    goalX: 0,
+                    goalY: 0,
+                    id: i,
+                    targId: target,
+                    skill: botSkill / 5
+                })
+            }
+            showKeyIndicators();
+            countdown.innerHTML = 3;
+            window.setTimeout(dropCountdown, 1000);
+            playMenu.className = "";
+        }
+
+
+        function botLogic(bot) {
+            var actBot = players[bot.id];
+            if (Math.random() > 0.998 || players[bot.targId].dead) {
+                var target = Math.floor(Math.random() * players.length);
+                while (target == bot.id || players[target].dead) {
+                    target = Math.floor(Math.random() * players.length);
+                }
+                bot.targId = target;
+            }
+
+            if (Math.random() < bot.skill) {
+                this.goalX = players[bot.targId].X;
+                this.goalY = players[bot.targId].Y;
+            }
+            if (actBot.X < 0 || actBot.X > mainCanvas.width) {
+                this.goalX = mainCanvas.width / 2;
+            }
+            if (actBot.Y < 0 || actBot.Y > mainCanvas.height) {
+                this.goalY = mainCanvas.height / 2;
+            }
+            if ((this.goalX * actBot.vY / actBot.vX + actBot.Y - actBot.X * actBot.vY / actBot.vX > this.goalY) == (actBot.vX < 0)) {
+                keysDown[actBot.keys[1]] = true;
+                keysDown[actBot.keys[0]] = false;
+            } else {
+                keysDown[actBot.keys[1]] = false;
+                keysDown[actBot.keys[0]] = true;
+            }
+        }
+
+        function poissonDistribute(w, h, x, y, r, k) {
+            var active = [[x, y]];
+            var points = [[x, y]];
+            console.log([w, h, x, y, r, k]);
+            while (active.length > 0) {
+                var cuPoint = active.splice(Math.floor(Math.random() * active.length), 1)[0];
+                for (var z = 0; z < k; z++) {
+                    var t = Math.random() * Math.PI * 2;
+                    var l = Math.random() * r + r;
+                    var oX = Math.cos(t) * l;
+                    var oY = Math.sin(t) * l;
+                    var nX = cuPoint[0] + oX;
+                    var nY = cuPoint[1] + oY;
+                    var ok = (nX > 0) && (nY > 0) && (nX < w) && (nY < h);
+                    if (ok) {
+                        for (var i = 0; i < points.length; i++) {
+                            var dX = nX - points[i][0];
+                            var dY = nY - points[i][1];
+                            var d = dX * dX + dY * dY;
+                            if (d < r * r) {
+                                ok = false;
+                                break;
+                            }
+                        }
+                    }
+                    if (ok) {
+                        points.push([nX, nY]);
+                        active.push([nX, nY]);
+                    }
+                }
+            }
+            return points;
+        }
+
+        keysDown[122] = true;
+    </script>
+</body>
