@@ -9,9 +9,9 @@ This is an essay about virtue, through the metaphor of the soup ritual.
 
 What is the soup ritual? It's when a group of people gather around a soup and try to guess what's in it. It's very common in my family - I've been doing it since before I remember.
 
-People take turns saying guesses, and we all nod thoughtfully, tasting the soup to check. Someone says there's a herb - maybe parsely? Not quite. Coriander, someone else suggests, and we all agree, yes, of course, there is a hint of coriander. And the big yellow lump floating in it - could be potato? Carrot? Squash?
+Someone suggests a potential ingredient, and we all nod thoughtfully, tasting the soup to check. One of us says there's a herb - maybe parsely? Not quite. Coriander, someone else suggests, and we all agree, yes, of course, there is a hint of coriander. And the big yellow lump floating in it - could be potato? Carrot? Squash?
 
-And the internal experience is particularly interesting - you have this wash of flavours in your mouth that you just can't make sense of, but when somebody says "parsely", or when you actually think to yourself "parsley", suddenly you know it is parsley.
+And the internal experience is particularly interesting - you have this wash of flavours in your mouth that you just can't make sense of, but when somebody says "parsely", or when you actually think to yourself "parsley", suddenly you know it is parsley. You're certain - it just clicks into place.
 
 It's like listening to a song and not being able to make out the lyrics until someone says the phrase, or looking blankly at a photograph of some leaves until someone points out the neatly camoflaged frog.
 
@@ -29,7 +29,7 @@ I think this is what made virtue ethics click for me.
 
 The great sleight of hand in a lot of modern moral philosophy is that you neatly abstract away all the messy details and focus your analysis on a short summary of the problem, without context. 
 
-Kant's approach in the metaphysics of morals gives criteria for judging specific maxims - how you act, and why - but it doesn't so much tell you which maxims might apply to a situation.
+Kant's approach in the metaphysics of morals gives criteria for judging specific maxims - how you act, and why - but it doesn't so much tell you which maxims might apply to a situation. Often there are several which point in different directions.
 
 Utilitarianism, and consequentialism more generally, tell you to crunch the numbers, and add up all the terms, but the hard part is figuring out what all the terms are, and the easy mistake of a naive conequentialist is not noticing all the second-order effects.
 
