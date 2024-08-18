@@ -8,15 +8,17 @@ title: "Elsewhere"
 
 ### Some papers
 
-You can find me on [google scholar](https://scholar.google.com/citations?user=RcAqOJQAAAAJ&hl=en) although my profile is sadly not indexed, because I have no institutional affiliation. (Actually, they'd accept any non-gmail email, but it doesn't seem worth the time.)
+You can find me on [google scholar](https://scholar.google.com/citations?user=RcAqOJQAAAAJ&hl=en) although my profile is not indexed, because I have no institutional affiliation.
 
 ### Other bits of writing
 
-I have a smattering of LessWrong posts: the two I would recommend are [this scrappy attempt at ML research](https://www.lesswrong.com/posts/hmPCPyr6JFLEigHJx/goal-direction-for-simulated-agents) and [this](https://www.lesswrong.com/posts/vdzEpiYX4aRqtpPSt/the-opt-out-clause).
+I have a smattering of LessWrong posts: the two I would recommend are [this conceptual puzzling over agency](https://www.lesswrong.com/posts/jpGHShgevmmTqXHy5/decomposing-agency-capabilities-without-desires) and [this very short piece](https://www.lesswrong.com/posts/vdzEpiYX4aRqtpPSt/the-opt-out-clause).
 
 ### Other places
 
 I have a [github](https://www.github.com/raymondadouglas) but all the repos are private except for this site itself. If you're really committed, you can snoop on my drafts.
+
+I sometimes write scripts for youtube videos, like this [explanation of mechanistic interpretability](https://www.youtube.com/watch?v=jGCvY4gNnA8)
 
 ### Social Media
 
