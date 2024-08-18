@@ -30,6 +30,9 @@ categories:
 
 
 # Example usage
-create_jekyll_post("February Roundup")
+create_jekyll_post("Free energy - another hapless explainer")
+
+
+# %%
 
 # %%
