@@ -30,7 +30,7 @@ categories:
 
 
 # Example usage
-create_jekyll_post("Free energy - another hapless explainer")
+create_jekyll_post("Conversation as a mini economy")
 
 
 # %%
