@@ -8,15 +8,14 @@ title: "About"
 
 I guess I'm a bit of a generalist. I did my degree in mathematics and philosophy mostly because I wanted good fundamentals and I didn't want to specialise.
 
-Officially the thing I do is run a residency programme, which in practice is a way for me to live with people I like and have space to work on a very broad range of projects.
+Officially I am a part-time research analyst on AI strategy and differential progress, and a part-time writer of videos about dogs. In practice I try to stay flexible.
 
 Over the past few years my main interests have been:
-- **Research**, mostly into machine learning, predictive models, and causality
-- **Writing**, sometimes about AI, often satirical, originally plays but more recently screenplays
-- **Teaching**, mostly at little workshops, where I tend to teach epistemology, information theory, and sometimes a bit of music
-- **Startups**, usually little side projects: formerly a dating app and a charity that provided on-demand mentoring, and currently something to do with housing
-- **Music**, mostly in the form of little singalongs, and mostly the guitar or the ukulele, although I dabble in the harmonica
-- **Drifting**, which for me has meant usually not staying in one country for more than six months, although that seems to be changing
+- **Research**, these days mostly on the future of AI and how it might affect society, with a particular interest in the notion of agency and goals.
+- **Writing**, sometimes about AI, often satirical, originally plays but more recently screenplays.
+- **Teaching**, mostly at little workshops, where I tend to teach epistemology, information theory, and sometimes a bit of music.
+- **Startups**, usually little side projects: formerly a dating app and a charity that provided on-demand mentoring, then something about housing. Currently in a lull but I keep getting drawn back in.
+- **Music**, mostly in the form of little singalongs, and mostly the guitar or the ukulele, although I dabble in the harmonica.
 
 ### "But who are you really?"
 
