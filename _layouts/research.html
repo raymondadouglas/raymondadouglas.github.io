@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="{{ page.lang | default: site.lang | default: "en-US" }}">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+{% seo %}
+    <style>
+        body {
+            font-family: 'Georgia', serif;
+            margin: 0;
+            padding: 0.5em;
+            line-height: 1.6;
+            background: #f5f5f5;
+            color: #333;
+        }
+
+        .container {
+            max-width: 50em;
+            margin: 0 auto;
+            background: #fff;
+            padding: 1em;
+            border-radius: 3px;
+        }
+
+        img {
+            width:100%;
+        }
+
+        ul li {
+            margin-bottom: 0.5rem;
+        }
+
+        a {
+            color: inherit;
+            text-underline-offset: 2.5px;
+            text-decoration: dotted underline #0005
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .header {
+            display: flex;
+            flex-direction: column;
+            gap: 0 2em;
+
+        }
+
+        .profilepic {
+            width: 100%;
+        }
+
+        /* Optional: responsive tweaks */
+        @media (min-width: 450px) {
+            .profilepic {
+                width: 1100px;
+            }
+            .header {
+                flex-direction: row-reverse;
+            }
+        }
+
+    </style>
+  </head>
+  <body>
+        <div class="container">
+            {{ content }}
+        </div>
+  </body>
+</html>
