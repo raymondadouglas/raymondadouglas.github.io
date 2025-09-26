@@ -53,10 +53,21 @@
             width: 100%;
         }
 
-        /* Optional: responsive tweaks */
-        @media (min-width: 450px) {
+
+
+        @media (min-width: 550px) {
             .profilepic {
-                width: 1100px;
+                display: none;
+            }
+            .header {
+                flex-direction: row-reverse;
+            }
+        }
+
+        @media (min-width: 800px) {
+            .profilepic {
+                width: 1000px;
+                display: block;
             }
             .header {
                 flex-direction: row-reverse;
