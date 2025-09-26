@@ -16,7 +16,7 @@ title: "Research Bio"
     
 </div>
 
-My work has been discussed in (the Guardian)[https://www.theguardian.com/books/2025/may/04/the-big-idea-can-we-stop-ai-making-humans-obsolete], (the Times)[https://www.thetimes.com/us/news-today/article/why-how-ai-lead-end-humanity-nx8zjhgft], and in my own piece for the Economist. I also co-organised the workshop on (Post-AGI Civilizational Equilibria)[https://post-agi.org/].
+My work has been discussed in [the Guardian](https://www.theguardian.com/books/2025/may/04/the-big-idea-can-we-stop-ai-making-humans-obsolete), [the Times](https://www.thetimes.com/us/news-today/article/why-how-ai-lead-end-humanity-nx8zjhgft), and in my own piece for [the Economist](https://www.economist.com/by-invitation/2025/09/18/two-scholars-ask-whether-democracy-can-survive-if-ai-does-all-the-jobs). I also co-organised the workshop on [Post-AGI Civilizational Equilibria](https://post-agi.org/).
 
 Some research highlights:
 
