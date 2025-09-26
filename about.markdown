@@ -8,7 +8,7 @@ title: "About"
 
 I guess I'm a bit of a generalist. I did my degree in mathematics and philosophy mostly because I wanted good fundamentals and I didn't want to specialise.
 
-Officially I am a part-time research analyst on AI strategy and differential progress, and a part-time writer of videos about dogs. In practice I try to stay flexible.
+Officially I am a part-time research analyst on AI strategy and differential progress. In practice I try to stay flexible.
 
 Over the past few years my main interests have been:
 - **Research**, these days mostly on the future of AI and how it might affect society, with a particular interest in the notion of agency and goals.
@@ -19,7 +19,7 @@ Over the past few years my main interests have been:
 
 ### "But who are you really?"
 
-Some opinions:
+Some opinions (originally from Dec 23, still endorsed as of Sep 25):
 - AI is probably the most important thing going on right now, and that there's a reasonable chance it will lead to a catastrophe
 - It is often useful to reason about the world in terms of incentive landscapes, and to ask how the 'preferences' of a group might differ from the preferences of its members
 - The part of the world I grew up in is having a crisis of faith: many structures that used to facilitate relationships have collapsed, been dismantled, or been outcompeted

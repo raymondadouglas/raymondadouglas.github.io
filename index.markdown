@@ -10,6 +10,8 @@ title: "Welcome!"
 
 You've found my weblog^. 
 
-Feel free to look around: maybe start with the page [about](/about) me and the site, or else look at the [archive](/archive) of all posts. 
+Feel free to look around: maybe start with the page [about](/about) me and the site, or else look at the [archive](/archive) of all posts.
+
+This is a general-purpose site, but if you're specifically interested in my research there's a separate page [here](/research).
 
 And do feel free to say [hello](mailto:raymondadouglas@gmail.com): like many others, I enjoy hearing from people who happen to stumble across my blog, and if that stops being true, I will delete this sentence.

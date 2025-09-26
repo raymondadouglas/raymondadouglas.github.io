@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>J'accuse!</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-family: Arial, sans-serif;
+            transition: 0.3s;
+        }
+
+        button,
+        input {
+            margin: 10px;
+            padding: 10px;
+            font-size: 1em;
+            width: 3em;
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        .buttonsContainer {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        #refresh {
+            font-size: 2em;
+            display: none;
+        }
+
+        #reveal {
+            width: 5em;
+            display: none;
+        }
+
+        #countdownButton,
+        #time {
+            display: none;
+            width: 10em;
+            text-align: center;
+        }
+
+        #teamForm {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #generate {
+            width: 10em;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>J'accuse!</h1>
+    <div id="teamForm">
+        <label for="team1">Team 1 size: </label>
+        <input type="number" id="team1" min="0" value="4">
+        <label for="team2">Team 2 size: </label>
+        <input type="number" id="team2" min="0" value="2">
+        <button id="generate">Generate Buttons</button>
+    </div>
+    <div id="buttons"></div>
+    <button id="countdownButton">Start 2 Minute Countdown</button>
+    <p id="time"></p>    
+    <button id="reveal">Reveal All</button>
+
+    <button id="refresh">🔄</button>
+
+    <script>
+        window.addEventListener("load", function() {
+          if (screen.orientation) {
+            screen.orientation.lock("landscape");
+          }
+        });
+        var locPairs = [
+            ['Inside the Pyramids of Giza', 'Atop the Leaning Tower of Pisa'],
+            ['The Great Barrier Reef', 'The Sahara Desert'],
+            ['Times Square', 'The Amazon Rainforest'],
+            ['Mount Everest Summit', 'The Dead Sea'],
+            ['Eiffel Tower', 'Great Wall of China'],
+            ['Grand Canyon', 'Sydney Opera House'],
+            ['Niagara Falls', 'Kilimanjaro Peak'],
+            ['Sistine Chapel', 'Taj Mahal'],
+            ['Machu Picchu', 'Petra, Jordan'],
+            ['Galapagos Islands', 'Antarctica'],
+            ['Area 51', 'Bermuda Triangle'],
+            ['Stonehenge', 'Machu Picchu'],
+            ['The Depths of Loch Ness', 'The Peak of Olympus Mons, Mars'],
+            ['North Pole', 'South Pole'],
+            ['Chernobyl Exclusion Zone', 'Fukushima Exclusion Zone'],
+            ['Atlantis', 'Mount Olympus'],
+            ['The Underworld', 'Valhalla'],
+            ['Krakatoa Volcano Crater', 'Challenger Deep, Mariana Trench'],
+            ['White House, Washington D.C.', 'Buckingham Palace, London'],
+            ['The Colosseum, Rome', 'Parthenon, Athens'],
+            ['Teotihuacan, Mexico', 'Easter Island, Chile'],
+            ['Galaxy Far Far Away', 'Middle Earth'],
+            ['The Louvre, Paris', 'The Smithsonian, Washington D.C.'],
+            ['Alice’s Looking Glass', 'Dorothy\'s Kansas'],
+            ['The Event Horizon of a Black Hole', 'The Surface of a Neutron Star'],
+            ['Underneath Your Bed', 'Inside Your Closet'],
+            ['The Edge of the Universe', 'The Center of the Earth'],
+            ['The Bottom of a Coffee Cup', 'The Top of a Champagne Flute'],
+            ['A Painting by Van Gogh', 'A Sculpture by Michelangelo'],
+            ['A Ship in a Bottle', 'A Genie\'s Lamp'],
+            ['Inside Schroedinger’s Box', 'Plato’s Cave'],
+            ['The First Moon Landing Site', 'The Location of the Mars Rover'],
+            ['A Quiet Corner in a Busy Library', 'The Middle of a Crowded Subway'],
+            ['Picnic on a Sunny Meadow', 'Stargazing in a Dark Desert'],
+            ['Aisle Seat of an Airplane', 'Window Seat of a Train'],
+            ['A Hot Spring in Iceland', 'A Cold Desert in Antarctica'],
+            ['A Forest at Midnight', 'A City at Dawn'],
+            ['Inside a Coral Reef', 'Above the Canopy of the Amazon'],
+            ['Mouth of a Volcano', 'Inside a Glacier'],
+            ['On a Floating Lily Pad', 'On a Drifting Cloud'],
+            ['In the Heart of a Rainbow', 'In the Shadows of an Eclipse'],
+            ['In the Eye of a Tornado', 'At the Epicenter of an Earthquake'],
+            ['Front Row at Woodstock', 'Backstage at an Opera'],
+            ['Inside a Russian Nesting Doll', 'In an M.C. Escher Painting'],
+            ['On a Pirate Ship', 'In a Dragon’s Lair'],
+            ['On a Deserted Island', 'In a Bustling Metropolis'],
+            ['The Highest Branch of Yggdrasil', 'The Deepest Cavern of Hades'],
+            ['Between the Hands of a Clock', 'At the End of a Rainbow'],
+            ['In the Depths of a Novel', 'In the Frames of a Comic Strip'],
+            ['In a Childhood Memory', 'In a Future Dream'],
+            ['On the Rings of Saturn', 'On the Surface of the Sun'],
+            ['Top Shelf of a Liquor Cabinet', 'Bottom of a Toy Box'],
+            ['Inside a Zen Garden', 'In the Middle of a Circus Ring'],
+            ['A Silent Monastery', 'A Roaring Football Stadium'],
+            ['Inside a Crystal Ball', 'Within a Mirage'],
+            ['Inside a Particle Accelerator', 'In a Yoga Meditation'],
+            ['At the Gates of Heaven', 'At the River Styx'],
+            ['On the Internet', 'In a Diary'],
+            ['In a Sunflower Field', 'In a Coral Garden'],
+            ['On a Chessboard', 'In a Maze'],
+            ['In a War Trench', 'At a Peace Rally'],
+            ['On a Carousel', 'On a Roller Coaster'],
+            ['Inside a Thunderstorm', 'Under a Rainbow'],
+            ['In a Classic Car', 'On a Futuristic Spaceship'],
+            ['At a Tea Ceremony', 'At a Wine Tasting'],
+            ['On a Tightrope', 'In a Safety Net'],
+            ['An Apple Store', 'A Farmer\'s Market'],
+            ['Atop the Empire State Building', 'Underneath the London Bridge'],
+            ['In Willy Wonka\'s Chocolate Factory', 'At Ratatouille\'s Parisian Restaurant'],
+            ['The Lascaux Caves, France', 'The Modern Art Museum, New York'],
+            ['At a Beatles Concert', 'In a Beethoven Symphony'],
+            ['The Oval Office', 'The Kremlin'],
+            ['On a Gondola in Venice', 'On a Camel in Sahara'],
+            ['In the Audience of The Ellen Show', 'On the Set of Friends'],
+            ['In a Marathon in Athens', 'In the Stadium of the Super Bowl'],
+            ['At The Battle of Gettysburg', 'On the Moon Landing'],
+            ['Inside the Large Hadron Collider', 'In Tesla\'s Laboratory'],
+            ['On the Silk Road', 'In the International Space Station'],
+            ['In a Bazaar in Istanbul', 'In a Mall in America'],
+            ['On a Sand Dune in Sahara', 'On an Ice Floe in Arctic'],
+            ['Inside a Lava Lamp', 'In a Snow Globe'],
+            ['In a Game of Monopoly', 'In a Game of Chess'],
+            ['In a Dream', 'In Reality'],
+            ['On The Red Square, Moscow', 'On The Times Square, New York'],
+            ['Inside a Game of Tetris', 'In a Match of Fortnite'],
+            ['At a Silent Disco', 'In a Public Library'],
+            ['In a Lighthouse', 'In a Submarine'],
+            ['In a Hot Air Balloon', 'In a Submersible'],
+            ['At a Drive-In Theater', 'In a VR Gaming Session'],
+            ['In a Lecture Hall at Harvard', 'At a Cooking Class in Italy'],
+            ['On a Safari in Africa', 'At a Zoo'],
+            ['On a Fishing Boat', 'At a Sushi Bar'],
+            ['Inside a Fast Food Kitchen', 'In a MasterChef Studio'],
+            ['On the Dance Floor of a Salsa Club', 'At a Ballet Rehearsal'],
+            ['In the Front Row of a Fashion Show', 'At a Thrift Store'],
+            ['In the Control Room of a Nuclear Power Plant', 'At a Wind Farm'],
+            ['On the Trading Floor of the NYSE', 'In a Home Office'],
+            ['In a Botanical Garden', 'In a Supermarket Produce Aisle'],
+            ['In a Cabin in the Woods', 'In a Penthouse in Manhattan'],
+            ['On a Cruise Ship', 'On a Raft on the Amazon River'],
+            ['In a Michelin Star Restaurant', 'At a Street Food Stall'],
+            ['In the Spotlight on a Stage', 'In the Shadows Backstage'],
+            ['In a Jam-Packed Elevator', 'On a Lone Mountain Peak'],
+            ['Inside a Clock Tower', 'In the Sands of an Hourglass'],
+            ['In the Cockpit of an Airplane', 'On a Bicycle'],
+            ['At the Summit of a Roller Coaster', 'At a Zen Garden'],
+            ['On a Safari in Serengeti, Tanzania', 'At the Grand Canyon, Arizona, USA'],
+            ['In a Samurai Dojo, Japan', 'At a Cowboy Ranch, Texas, USA'],
+            ['At the Running of the Bulls, Pamplona, Spain', 'In the Napa Valley Vineyards, California, USA'],
+            ['On an Iceberg in Greenland', 'In the Death Valley, California, USA'],
+            ['On the Canals of Amsterdam, Netherlands', 'On the Nile River, Egypt'],
+            ['Inside the Colosseum, Rome, Italy', 'At a Rodeo in Texas, USA'],
+            ['In a Vineyard in Tuscany, Italy', 'At a Brewery in Munich, Germany'],
+            ['On a Ski Slope in the Swiss Alps', 'On a Beach in Cancún, Mexico'],
+            ['Inside the Kremlin, Moscow, Russia', 'At the Golden Gate Bridge, San Francisco, USA'],
+            ['On the Banks of the Ganges, India', 'At the Statue of Liberty, New York, USA'],
+            ['In an English Garden, UK', 'In the Redwood Forest, California, USA'],
+            ['At the Sydney Opera House, Australia', 'On the Great Wall of China'],
+            ['On a 19th Century Transcontinental Train', 'On a Hyperloop Pod'],
+            ['In the Trenches of World War I', 'In the Cyber Battlefield of a Future War'],
+            ['In a Jazz Club during the Harlem Renaissance', 'At an EDM Festival'],
+            ['At the Constitutional Convention', 'In a Modern Supreme Court Session'],
+            ['In the Laboratory of Marie Curie', 'In the Control Room of CERN'],
+            ['In the Assembly Line of the First Model T', 'At the Launch of the Newest Tesla Model'],
+            ['In a Prohibition Era Hidden Brewery', 'In a Craft Microbrewery'],
+            ['On Ellis Island in the 1900s', 'In an International Space Station'],
+            ['At the Discovery of Fire', 'At the Invention of the Quantum Computer'],
+            ['On a Colonial Ship to the New World', 'On a Spaceship to a New Galaxy'],
+            ['At a Philosophical Debate in Ancient Athens', 'At a Ted Talk'],
+            ['In the First Library of Alexandria', 'In the Servers of Google'],
+            ['On a 19th Century Whaling Ship', 'In an Underwater Research Submarine'],
+            ['At a 1920s Harlem Jazz Club', 'At a 2030s Virtual Reality Concert'],
+            ['In the Court of Louis XIV', 'In the Office of a Fortune 500 CEO'],
+            ['On the Set of a 1950s Hollywood Film', 'In the Production Studio of a Netflix Series'],
+            ['At a Duel in the Wild West', 'At a Modern Esports Tournament'],
+            ['In an 18th Century Apothecary', 'In a Modern Pharmaceutical Lab'],
+            ['On the Construction Site of the Pyramids', 'At the Unveiling of a New AI Supercomputer'],
+            ['In a Victorian Séance', 'In a Modern Neuroscience Lab'],
+            ['On a Viking Longship', 'On an Antarctic Expedition'],
+            ['At the Battle of Waterloo', 'At the Annual UN Assembly'],
+            ['In the Studio of Leonardo da Vinci', 'In the Lab of a Leading AI Researcher'],
+            ['At a 19th Century Fox Hunt', 'At a 21st Century Drone Race'],
+            ['At a Beatles Concert in the 60s', 'In the Audience of a Virtual K-Pop Concert'],
+            ['At the Fall of the Berlin Wall', 'At the First Human Mars Landing'],
+            ['On the Hindenburg', 'On a SpaceX Rocket'],
+        ];
+
+        var randomPair = locPairs[Math.floor(Math.random() * locPairs.length)];
+
+        function playBeep(freq) {
+            var context = new (window.AudioContext || window.webkitAudioContext)();
+            var osc = context.createOscillator();
+            osc.frequency.value = freq || Math.random() * 300 + 500;
+            osc.connect(context.destination);
+            osc.start();
+            setTimeout(() => osc.stop(), 600);
+        }
+
+        function revealAll() {
+            playBeep();
+            setTimeout(() => {
+                playBeep();
+                setTimeout(() => {
+                    playBeep();
+                    setTimeout(() => alert('Locations: ' + randomPair.join(', ')), 600);
+                }, 600);
+            }, 600);
+        }
+
+        document.getElementById('reveal').addEventListener('click', revealAll);
+
+        document.getElementById('generate').addEventListener('click', function () {
+            var team1Size = parseInt(document.getElementById('team1').value);
+            var team2Size = parseInt(document.getElementById('team2').value);
+            var totalSize = team1Size + team2Size;
+
+            var arr = Array(team1Size).fill(0).concat(Array(team2Size).fill(1)).sort(() => Math.random() - 0.5);
+            var buttonsContainer = document.getElementById('buttons');
+            buttonsContainer.innerHTML = '';
+            buttonsContainer.classList.add("buttonsContainer")
+
+            arr.forEach((v, i) => {
+                var button = document.createElement('button');
+                button.style.backgroundColor = 'rgb(' + Math.floor(Math.random() * 255) + ',' + Math.floor(Math.random() * 255) + ',' + Math.floor(Math.random() * 255) + ')';
+                button.textContent = i + 1;
+                button.onclick = function () {
+                    playBeep();
+                    setTimeout(() => alert('Location: ' + randomPair[v]), 600);
+                };
+                buttonsContainer.appendChild(button);
+            });
+
+            document.getElementById('teamForm').style.display = 'none';
+            document.getElementById('refresh').style.display = 'block';
+            document.getElementById('countdownButton').style.display = 'flex';
+            document.getElementById('time').style.display = 'block';
+            document.getElementById('reveal').style.display = 'block';
+        });
+
+        document.getElementById('refresh').addEventListener('click', function () {
+            document.getElementById('teamForm').style.display = 'flex';
+            document.getElementById('refresh').style.display = 'none';
+            document.getElementById('countdownButton').style.display = 'none';
+            document.getElementById('time').style.display = 'none';
+            document.getElementById('reveal').style.display = 'none';
+            randomPair = locPairs[Math.floor(Math.random() * locPairs.length)];
+            document.getElementById('buttons').innerHTML = '';
+        });
+
+        var countdown;
+        document.getElementById('countdownButton').addEventListener('click', function () {
+            var time = document.getElementById('time');
+            var duration = 2 * 60;
+            var freq = 300;
+            if (countdown) {
+                clearInterval(countdown);
+            }
+            countdown = setInterval(function () {
+                playBeep(freq);
+                freq += 2;  // Increase the frequency for each second.
+                var minutes = Math.floor(duration / 60);
+                var seconds = Math.floor(duration % 60);
+                time.textContent = minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
+                duration--;
+                if (duration < 0) {
+                    clearInterval(countdown);
+                    time.textContent = 'Time Up!';
+                }
+            }, 1000);
+        });
+    </script>
+</body>
+
+</html>
