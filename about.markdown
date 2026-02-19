@@ -6,20 +6,13 @@ title: "About"
 
 ## About Me
 
-I guess I'm a bit of a generalist. I did my degree in mathematics and philosophy mostly because I wanted good fundamentals and I didn't want to specialise.
+If you're interested in my research, there's a more specific bio [here](/research).
 
-Officially I am a part-time research analyst on AI strategy and differential progress. In practice I try to stay flexible.
-
-Over the past few years my main interests have been:
-- **Research**, these days mostly on the future of AI and how it might affect society, with a particular interest in the notion of agency and goals.
-- **Writing**, sometimes about AI, often satirical, originally plays but more recently screenplays.
-- **Teaching**, mostly at little workshops, where I tend to teach epistemology, information theory, and sometimes a bit of music.
-- **Startups**, usually little side projects: formerly a dating app and a charity that provided on-demand mentoring, then something about housing. Currently in a lull but I keep getting drawn back in.
-- **Music**, mostly in the form of little singalongs, and mostly the guitar or the ukulele, although I dabble in the harmonica.
+Research is in fact the main thing I do these days. In the past I was an occasional writer of plays, founder of startups, and otherwise miscellaneous doer of things, and I try to keep that spirit alive.
 
 ### "But who are you really?"
 
-Some opinions (originally from Dec 23, still endorsed as of Sep 25):
+Some opinions (originally from Dec 23, still endorsed as of Feb 26 although I'd change the phrasing a bit):
 - AI is probably the most important thing going on right now, and that there's a reasonable chance it will lead to a catastrophe
 - It is often useful to reason about the world in terms of incentive landscapes, and to ask how the 'preferences' of a group might differ from the preferences of its members
 - The part of the world I grew up in is having a crisis of faith: many structures that used to facilitate relationships have collapsed, been dismantled, or been outcompeted
