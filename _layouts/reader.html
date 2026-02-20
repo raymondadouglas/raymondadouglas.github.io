@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ page.title }}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=EB+Garamond:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+  <style>
+    /* ── CSS custom properties (light theme defaults) ── */
+    :root {
+      --bg:        #fdf8f0;
+      --fg:        #2c2416;
+      --accent:    #9a8060;
+      --accent-h:  #2c2416;
+      --gold:      #c8a97a;
+      --border:    #e0d4bc;
+      --img-bg:    #fff;
+      --cap-fg:    #9a8060;
+    }
+
+    [data-theme="dark"] {
+      --bg:        #1a1510;
+      --fg:        #e8dcc8;
+      --accent:    #b09a76;
+      --accent-h:  #e8dcc8;
+      --gold:      #c8a97a;
+      --border:    #3a3020;
+      --img-bg:    #111;
+      --cap-fg:    #a08868;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      font-family: 'Lora', Georgia, serif;
+      font-size: 1.15rem;
+      line-height: 1.85;
+      transition: background 0.25s, color 0.25s;
+    }
+
+    a { color: inherit; }
+
+    .reader-shell {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem 5rem;
+    }
+
+    /* ── top nav bar ── */
+    .reader-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.82rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--accent);
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 1rem;
+      margin-bottom: 3rem;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .reader-nav a {
+      color: var(--accent);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .reader-nav a:hover { color: var(--accent-h); }
+
+    .nav-arrow { font-style: normal; }
+
+    /* ── reader controls (night mode + text size) ── */
+    .reader-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .ctrl-btn {
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--accent);
+      font-family: inherit;
+      font-size: 0.75rem;
+      line-height: 1;
+      padding: 0.25rem 0.45rem;
+      border-radius: 3px;
+      cursor: pointer;
+      transition: color 0.15s, border-color 0.15s;
+      letter-spacing: 0;
+      text-transform: none;
+    }
+    .ctrl-btn:hover {
+      color: var(--accent-h);
+      border-color: var(--accent);
+    }
+
+    /* ── chapter header ── */
+    .chapter-header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+
+    .book-title-link {
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      text-decoration: none;
+      display: block;
+      margin-bottom: 0.6rem;
+    }
+    .book-title-link:hover { color: var(--accent-h); }
+
+    .chapter-header h1 {
+      font-family: 'Lora', Georgia, serif;
+      font-size: 1.5rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      color: var(--fg);
+    }
+
+    .chapter-ornament {
+      color: var(--gold);
+      font-size: 1.4rem;
+      margin-top: 0.6rem;
+      display: block;
+    }
+
+    /* ── body text ── */
+    .chapter-body p {
+      text-indent: 2em;
+      margin-bottom: 0;
+    }
+
+    .chapter-body p + p {
+      margin-top: 0;
+    }
+
+    /* first real text paragraph — no indent, drop cap */
+    .chapter-body p.first-para {
+      text-indent: 0;
+    }
+
+    .chapter-body p.first-para::first-letter {
+      float: left;
+      font-size: 4.5rem;
+      line-height: 0.75;
+      margin: 0.05em 0.07em 0 0;
+      font-family: 'EB Garamond', Georgia, serif;
+      color: var(--gold);
+      font-weight: 400;
+    }
+
+    /* ── chapter opener illustration (from h2) ── */
+    img.chapter-opener {
+      display: block;
+      max-width: 100%;
+      height: auto;
+      margin: 0 auto 1.5rem;
+      border: 1px solid var(--border);
+      padding: 6px;
+      background: var(--img-bg);
+    }
+
+    /* ── inline illustrations ── */
+    .chapter-body img:not(.chapter-opener) {
+      display: block;
+      max-width: 100%;
+      height: auto;
+      margin: 2rem auto;
+      border: 1px solid var(--border);
+      padding: 6px;
+      background: var(--img-bg);
+    }
+
+    /* ── captions ── */
+    .chapter-body .caption,
+    .chapter-body p.caption {
+      text-align: center;
+      text-indent: 0;
+      font-style: italic;
+      font-size: 0.88rem;
+      color: var(--cap-fg);
+      margin-top: -1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    /* ── bottom footer nav ── */
+    .reader-footer {
+      margin-top: 4rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.82rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--accent);
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .reader-footer a {
+      color: var(--accent);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .reader-footer a:hover { color: var(--accent-h); }
+
+    .footer-home { text-align: center; flex: 1; }
+    .reader-footer > *:first-child { flex: 1; }
+    .reader-footer > *:last-child  { flex: 1; text-align: right; }
+
+    /* ── table of contents page ── */
+    .toc-topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.82rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--accent);
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 1rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .site-back {
+      color: var(--accent);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .site-back:hover { color: var(--accent-h); }
+
+    .toc-header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+
+    .toc-header h1 {
+      font-family: 'Lora', Georgia, serif;
+      font-size: 2rem;
+      font-weight: 600;
+      color: var(--fg);
+      margin-bottom: 0.3rem;
+    }
+
+    .toc-header .author {
+      font-style: italic;
+      color: var(--accent);
+      font-size: 1rem;
+    }
+
+    .toc-header .toc-ornament {
+      color: var(--gold);
+      font-size: 1.8rem;
+      margin-top: 0.8rem;
+      display: block;
+    }
+
+    .toc-cover-link {
+      display: block;
+      width: fit-content;
+      margin: 1.5rem auto 0.75rem;
+    }
+    .toc-cover-link:hover .toc-cover {
+      border-color: var(--gold);
+      opacity: 0.9;
+    }
+
+    .toc-cover {
+      display: block;
+      max-width: 260px;
+      border: 1px solid var(--border);
+      padding: 6px;
+      background: var(--img-bg);
+      transition: border-color 0.2s, opacity 0.2s;
+    }
+
+    .begin-reading {
+      display: block;
+      text-align: center;
+      margin-bottom: 2rem;
+      font-size: 0.82rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      text-decoration: none;
+    }
+    .begin-reading:hover { color: var(--gold); }
+
+    /* ── volume groupings ── */
+    .toc-volumes {
+      margin-top: 0.5rem;
+    }
+
+    .toc-volume {
+      margin-top: 2rem;
+    }
+
+    .vol-heading {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.9rem;
+    }
+    .vol-heading::before,
+    .vol-heading::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+    .vol-heading span {
+      font-family: 'Lora', Georgia, serif;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      white-space: nowrap;
+    }
+
+    /* chapter list — four columns, column-major flow */
+    .toc-list {
+      list-style: none;
+      columns: 4;
+      column-gap: 0.5rem;
+      margin: 0;
+      padding: 0;
+    }
+
+    .toc-list li {
+      break-inside: avoid;
+      padding: 0.22rem 0;
+      text-align: center;
+    }
+
+    .toc-list a {
+      color: var(--fg);
+      text-decoration: none;
+      font-size: 0.88rem;
+      transition: color 0.15s;
+    }
+    .toc-list a:hover {
+      color: var(--gold);
+    }
+
+    .toc-note {
+      margin-top: 2.5rem;
+      font-size: 0.78rem;
+      color: var(--accent);
+      text-align: center;
+      font-style: italic;
+      line-height: 1.6;
+    }
+
+    .toc-note a {
+      color: var(--accent);
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+    .toc-note a:hover { color: var(--accent-h); }
+
+    /* ── toc controls (night mode btn injected by JS) ── */
+    .toc-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    @media (max-width: 600px) {
+      body { font-size: 1.05rem; }
+      .reader-shell { padding: 2rem 1.2rem 4rem; }
+      .chapter-header h1 { font-size: 1.25rem; }
+      .toc-list { columns: 2; }
+    }
+
+    @media (max-width: 380px) {
+      .toc-list { columns: 1; }
+    }
+  </style>
+</head>
+<body>
+  <div class="reader-shell">
+    {{ content }}
+  </div>
+
+  <script>
+    const LS_THEME = 'pandp-theme';
+    function getTheme() { return localStorage.getItem(LS_THEME) || 'light'; }
+
+    function applyTheme(t) {
+      document.documentElement.setAttribute('data-theme', t);
+      localStorage.setItem(LS_THEME, t);
+      document.querySelectorAll('.theme-btn').forEach(function (btn) {
+        btn.textContent = t === 'dark' ? '☀ Day' : '☾ Night';
+      });
+    }
+
+    // apply before paint to avoid flash
+    applyTheme(getTheme());
+
+    document.addEventListener('DOMContentLoaded', function () {
+      document.querySelectorAll('.reader-controls, .toc-controls').forEach(function (container) {
+        var btn = document.createElement('button');
+        btn.className = 'ctrl-btn theme-btn';
+        btn.setAttribute('aria-label', 'Toggle night mode');
+        btn.textContent = getTheme() === 'dark' ? '☀ Day' : '☾ Night';
+        btn.addEventListener('click', function () {
+          applyTheme(getTheme() === 'dark' ? 'light' : 'dark');
+        });
+        container.appendChild(btn);
+      });
+    });
+  </script>
+</body>
+</html>
