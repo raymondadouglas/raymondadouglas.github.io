@@ -14,7 +14,7 @@ You've found my (somewhat poorly maintained) weblog^. At this stage it's mostly 
 - [My substack](https://legacymode.substack.com/), where I curate interesting news of people handing over authority to AIs
 - [My twitter profile](https://x.com/raymondadouglas)
 
-And also feel free to [email me](mailto:raymondadouglas@gmail.com): like many others, I enjoy hearing from people who happen to stumble across my blog, and if that stops being true, I will delete this sentence.
+And also feel free to [email me](mailto:raymondadouglas@gmail.com): like many others, I enjoy hearing from people who happen to stumble across my blog, and if that stops being true, I will delete this sentence. **Update:** As of 2026, I am now getting a lot of extremely long emails written with AI assistance, often linking to far longer documents. I am actually quite happy to hear from AIs, but my likelihood to respond is roughly inversely proportional to the length of email and attached content.
 
 If you are really very curious, among the various archived material you will find:
 - [*J'accuse*](/jaccuse.html), an implementation of a social deception game that I vibecoded in 2022 to prove a point, while someone else was trying to get a chat assistant to directly moderate the game.
