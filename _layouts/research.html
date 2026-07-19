@@ -22,19 +22,85 @@
 
         .container {
             max-width: 46em;
-            margin: 2em auto;
+            margin: 1.5em auto;
         }
 
         .card {
             background: #fff;
-            padding: 1.5em 1.75em;
+            padding: 1.15em 2em;
             border-radius: 0.5em;
             box-shadow: 0 2px 6px rgba(76, 31, 43, 0.06), 0 12px 32px rgba(76, 31, 43, 0.10);
-            margin-bottom: 1.75em;
+            margin-bottom: 1.1em;
         }
 
-        .card > h2:first-child {
-            margin-top: 0;
+        /* Collapsible cards: native <details>, h2-as-summary */
+        summary {
+            list-style: none;
+            cursor: pointer;
+            -webkit-user-select: none;
+            user-select: none;
+            position: relative;
+        }
+
+        summary::-webkit-details-marker {
+            display: none;
+        }
+
+        summary h2 {
+            margin: 0;
+        }
+
+        details[open] summary {
+            margin-bottom: 0.35em;
+        }
+
+        /* Thin disclosure chevron hanging in the card's left padding band,
+           centred on the header card's icon column (desktop);
+           points right when closed, down when open */
+        summary h2::before {
+            content: "";
+            position: absolute;
+            /* optical centre: h2's padding-bottom pulls the box centre
+               below the caps, so lift by half of it */
+            top: calc(50% - 0.1em);
+            left: -1rem;
+            width: 0.3em;
+            height: 0.3em;
+            border-right: 1.5px solid currentColor;
+            border-bottom: 1.5px solid currentColor;
+            opacity: 0.5;
+            transform: translate(-50%, -50%) rotate(-45deg);
+            transition: transform 0.2s cubic-bezier(1, 0, 0, 1);
+        }
+
+        details[open] summary h2::before {
+            transform: translate(-50%, -50%) rotate(45deg);
+        }
+
+        summary:hover h2::before {
+            opacity: 1;
+        }
+
+        /* Closed card is a plain title bar: no hairline under the heading */
+        details:not([open]) summary h2 {
+            border-bottom-color: transparent;
+        }
+
+        /* Smooth open/close where supported (Chromium 131+); elsewhere it snaps */
+        @supports (interpolate-size: allow-keywords) {
+            :root {
+                interpolate-size: allow-keywords;
+            }
+
+            details::details-content {
+                block-size: 0;
+                overflow-y: clip;
+                transition: block-size 0.25s ease, content-visibility 0.25s allow-discrete;
+            }
+
+            details[open]::details-content {
+                block-size: auto;
+            }
         }
 
         h1 {
@@ -60,7 +126,7 @@
             color: #8a3b52;
             border-bottom: 1px solid #e8d4da;
             padding-bottom: 0.4em;
-            margin: 2.25em 0 1em;
+            margin: 1.7em 0 0.85em;
         }
 
         img {
@@ -97,10 +163,13 @@
             display: flex;
         }
 
+        /* Banner can grow with viewport width but never stretch past 2:1 */
         .profilepic img {
             display: block;
             width: 100%;
-            height: 240px;
+            height: auto;
+            aspect-ratio: 2 / 1;
+            min-height: 200px;
             object-fit: cover;
             object-position: center calc(50% + 20px);
             border-radius: 0;
@@ -108,7 +177,7 @@
 
         .headertext {
             text-align: center;
-            padding: 1.5em 1.25em;
+            padding: 1.2em 1.25em 1.1em;
         }
 
         .affiliation {
@@ -116,10 +185,10 @@
             grid-template-columns: repeat(3, max-content);
             column-gap: 0.35em;
             width: max-content;
-            margin: 0.6em auto 0;
+            margin: 0.5em auto 0;
             font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
             font-size: 0.8em;
-            line-height: 2;
+            line-height: 1.85;
             color: #8d7f83;
         }
 
@@ -143,7 +212,7 @@
             justify-content: center;
             align-items: center;
             gap: 1.5em;
-            padding: 1.2em 1.25em;
+            padding: 0.95em 1.25em;
             border-top: 1px solid #f0e2e6;
             color: #8d7f83;
         }
@@ -164,7 +233,7 @@
 
         @media (min-width: 570px) {
             .card {
-                padding: 2em 2.5em;
+                padding: 1.35em 2.5em;
             }
             .headercard {
                 flex-direction: row-reverse;
@@ -177,23 +246,27 @@
             }
             .profilepic img {
                 height: 100%;
-                min-height: 240px;
+                min-height: 210px;
                 min-width: 0;
                 object-position: center;
             }
             .headertext {
                 flex: 1;
                 align-self: center;
-                padding: 2em 1.5em;
+                padding: 1.6em 1.5em;
+            }
+            /* Chevron centre = icon rail centre (1.25em into the 2.5em band) */
+            summary h2::before {
+                left: -1.25rem;
             }
             /* Rail width = lower cards' 2.5em text inset, so the
                hairline sits exactly on the page's left text margin */
             .social-icons {
                 flex-direction: column;
                 justify-content: center;
-                gap: 1.3em;
+                gap: 1.15em;
                 flex: 0 0 2.5em;
-                padding: 1.5em 0;
+                padding: 1.25em 0;
                 border-top: none;
                 border-right: 1px solid #f0e2e6;
             }
