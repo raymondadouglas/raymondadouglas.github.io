@@ -1,0 +1,536 @@
+---
+layout: blank
+title: tuner
+permalink: /tuner/
+head_extra: >
+  <link rel="manifest" href="/tuner/manifest.webmanifest">
+  <meta name="theme-color" content="#8a3b52">
+  <link rel="apple-touch-icon" href="/tuner/icon-192.png">
+---
+
+<style>
+    :root {
+        --wine: #8a3b52;
+        --hairline: #f0e2e6;
+        --grey: #8d7f83;
+        --ink: #24292e;
+    }
+
+    body {
+        margin: 0;
+        font-family: 'Georgia', serif;
+        color: var(--ink);
+        background: #fff;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .tuner {
+        width: min(30em, calc(100vw - 4em));
+        text-align: center;
+        padding: 2em 0;
+    }
+
+    h1 {
+        font-size: 0.85em;
+        font-weight: normal;
+        letter-spacing: 0.25em;
+        text-transform: uppercase;
+        color: var(--wine);
+        border-bottom: 1px solid var(--hairline);
+        padding-bottom: 0.8em;
+        margin: 0 0 1.5em;
+    }
+
+    .note {
+        font-size: 6em;
+        line-height: 1.1;
+        min-height: 1.1em;
+        color: #e8d4da;
+        transition: color 0.15s;
+    }
+
+    .note.live { color: var(--ink); }
+    .note.tuned { color: var(--wine); }
+
+    .note sup {
+        font-size: 0.45em;
+        vertical-align: 0.7em;
+    }
+
+    .note .octave {
+        font-size: 0.3em;
+        color: var(--grey);
+        margin-left: 0.2em;
+    }
+
+    .meter {
+        position: relative;
+        height: 3.2em;
+        margin-top: 1em;
+    }
+
+    .meter .track {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 50%;
+        border-top: 1px solid var(--hairline);
+    }
+
+    .meter .tick {
+        position: absolute;
+        top: 50%;
+        width: 1px;
+        height: 0.6em;
+        transform: translateY(-50%);
+        background: var(--hairline);
+    }
+
+    .meter .tick.mid {
+        height: 1.4em;
+        background: #e8d4da;
+    }
+
+    .meter .needle {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 1px;
+        height: 2.4em;
+        transform: translate(-50%, -50%);
+        background: var(--ink);
+        opacity: 0;
+        transition: opacity 0.2s, left 0.1s ease-out;
+    }
+
+    .meter.live .needle { opacity: 1; }
+    .meter.tuned .needle { background: var(--wine); }
+
+    #trace {
+        display: block;
+        width: 100%;
+        height: 5.5em;
+        margin: -0.4em 0 0.4em;
+    }
+
+    .cents {
+        font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+        font-size: 0.8em;
+        color: var(--grey);
+        min-height: 1.4em;
+    }
+
+    .instruments {
+        display: flex;
+        justify-content: center;
+        gap: 1.6em;
+        border-top: 1px solid var(--hairline);
+        margin-top: 1.6em;
+        padding-top: 1.1em;
+    }
+
+    .instruments button,
+    .strings button {
+        font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+        font-size: 0.85em;
+        color: var(--grey);
+        background: none;
+        border: none;
+        padding: 0;
+        cursor: pointer;
+        transition: color 0.15s;
+        user-select: none;
+        -webkit-user-select: none;
+        touch-action: manipulation;
+    }
+
+    .instruments button:hover { color: var(--ink); }
+    .instruments button.selected { color: var(--wine); }
+
+    .strings {
+        display: flex;
+        justify-content: space-between;
+        padding: 1em 1.5em 0;
+    }
+
+    .strings button:hover,
+    .strings button.near { color: var(--ink); }
+    .strings button.tuned,
+    .strings button:active { color: var(--wine); }
+
+    .strings button.droning {
+        color: var(--wine);
+        border-bottom: 1px solid var(--wine);
+    }
+    .strings sub { font-size: 0.7em; pointer-events: none; }
+
+    #start {
+        font-family: 'Georgia', serif;
+        font-size: 1em;
+        color: var(--wine);
+        background: none;
+        border: 1px solid var(--hairline);
+        padding: 0.5em 1.6em;
+        margin-top: 2em;
+        cursor: pointer;
+    }
+
+    #start:hover { border-color: var(--wine); }
+
+    .hint {
+        font-size: 0.8em;
+        color: var(--grey);
+        margin-top: 1.2em;
+        min-height: 1.4em;
+    }
+
+    .back {
+        margin-top: 2.4em;
+        font-size: 0.8em;
+    }
+
+    .back a {
+        color: var(--grey);
+        text-decoration: none;
+    }
+
+    .back a:hover { color: var(--wine); }
+</style>
+
+<div class="tuner">
+    <h1>Tuner</h1>
+    <div class="note" id="note">&ndash;</div>
+    <div class="meter" id="meter">
+        <div class="track"></div>
+        <div class="needle" id="needle"></div>
+    </div>
+    <canvas id="trace"></canvas>
+    <div class="cents" id="cents">&nbsp;</div>
+    <div class="instruments" id="instruments"></div>
+    <div class="strings" id="strings"></div>
+    <button id="start">begin</button>
+    <div class="hint" id="hint">&nbsp;</div>
+    <div class="back"><a href="/">&larr; home</a></div>
+</div>
+
+<script>
+    const NOTE_NAMES = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+    const TUNINGS = {
+        guitar: [40, 45, 50, 55, 59, 64],
+        bass: [28, 33, 38, 43],
+        ukulele: [67, 60, 64, 69],
+        violin: [55, 62, 69, 76],
+        cello: [36, 43, 50, 57],
+    };
+    const TUNED_CENTS = 5;
+
+    const noteEl = document.getElementById('note');
+    const meterEl = document.getElementById('meter');
+    const needleEl = document.getElementById('needle');
+    const traceEl = document.getElementById('trace');
+    const centsEl = document.getElementById('cents');
+    const hintEl = document.getElementById('hint');
+    const startBtn = document.getElementById('start');
+    const instrumentsEl = document.getElementById('instruments');
+    const stringsEl = document.getElementById('strings');
+
+    // tick marks every 10 cents from -50 to +50
+    for (let c = -50; c <= 50; c += 10) {
+        const tick = document.createElement('div');
+        tick.className = 'tick' + (c === 0 ? ' mid' : '');
+        tick.style.left = (50 + c) + '%';
+        meterEl.insertBefore(tick, needleEl);
+    }
+
+    /* ---- instrument tunings ---- */
+
+    let stringEls = [];
+
+    for (const name of Object.keys(TUNINGS)) {
+        const b = document.createElement('button');
+        b.textContent = name;
+        b.addEventListener('click', () => selectInstrument(
+            b.classList.contains('selected') ? null : name));
+        instrumentsEl.appendChild(b);
+    }
+
+    function selectInstrument(name) {
+        stopDrone();
+        [...instrumentsEl.children].forEach(b =>
+            b.classList.toggle('selected', b.textContent === name));
+        stringsEl.innerHTML = '';
+        stringEls = (name ? TUNINGS[name] : []).map(midi => {
+            const b = document.createElement('button');
+            const n = NOTE_NAMES[midi % 12];
+            b.innerHTML = n.replace('#', '&sharp;')
+                + '<sub>' + (Math.floor(midi / 12) - 1) + '</sub>';
+            b.dataset.midi = midi;
+            b.title = (440 * Math.pow(2, (midi - 69) / 12)).toFixed(1) + ' Hz';
+            // click: pluck (or stop this string's drone); double-click: drone
+            b.addEventListener('click', () => {
+                if (drone && drone.el === b) stopDrone();
+                else playNote(midi);
+            });
+            b.addEventListener('dblclick', () => startDrone(midi, b));
+            stringsEl.appendChild(b);
+            return b;
+        });
+    }
+
+    /* ---- reference notes: a small plucked-string synth ---- */
+
+    let audioCtx = null;
+
+    function playNote(midi) {
+        audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+        audioCtx.resume();
+        const freq = 440 * Math.pow(2, (midi - 69) / 12);
+        const t = audioCtx.currentTime;
+        const gain = audioCtx.createGain();
+        gain.gain.setValueAtTime(0.25, t);
+        gain.gain.exponentialRampToValueAtTime(0.0001, t + 2.5);
+        const filter = audioCtx.createBiquadFilter();
+        filter.type = 'lowpass';
+        filter.frequency.setValueAtTime(freq * 8, t);
+        filter.frequency.exponentialRampToValueAtTime(freq * 2, t + 2);
+        const osc = audioCtx.createOscillator();
+        osc.type = 'triangle';
+        osc.frequency.value = freq;
+        osc.connect(filter).connect(gain).connect(audioCtx.destination);
+        osc.start(t);
+        osc.stop(t + 2.5);
+    }
+
+    let drone = null;
+
+    function startDrone(midi, el) {
+        stopDrone();
+        audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+        audioCtx.resume();
+        const freq = 440 * Math.pow(2, (midi - 69) / 12);
+        const t = audioCtx.currentTime;
+        const gain = audioCtx.createGain();
+        gain.gain.setValueAtTime(0.0001, t);
+        gain.gain.exponentialRampToValueAtTime(0.12, t + 0.15);
+        const filter = audioCtx.createBiquadFilter();
+        filter.type = 'lowpass';
+        filter.frequency.value = freq * 6;
+        const osc = audioCtx.createOscillator();
+        osc.type = 'triangle';
+        osc.frequency.value = freq;
+        osc.connect(filter).connect(gain).connect(audioCtx.destination);
+        osc.start(t);
+        el.classList.add('droning');
+        drone = { el, osc, gain };
+    }
+
+    function stopDrone() {
+        if (!drone) return;
+        const t = audioCtx.currentTime;
+        drone.gain.gain.setValueAtTime(drone.gain.gain.value, t);
+        drone.gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.3);
+        drone.osc.stop(t + 0.35);
+        drone.el.classList.remove('droning');
+        drone = null;
+    }
+
+    /* ---- pitch detection ---- */
+
+    // autocorrelation, searched over the 40–2000 Hz lag window
+    function detectPitch(buf, sampleRate) {
+        const n = buf.length;
+        let energy = 0;
+        for (let i = 0; i < n; i++) energy += buf[i] * buf[i];
+        if (Math.sqrt(energy / n) < 0.01) return -1; // too quiet
+
+        const minLag = Math.floor(sampleRate / 2000);
+        const maxLag = Math.min(n - 1, Math.ceil(sampleRate / 40));
+        const c = new Float32Array(maxLag + 2);
+        for (let lag = minLag; lag <= maxLag; lag++) {
+            let sum = 0;
+            for (let i = 0; i < n - lag; i++) sum += buf[i] * buf[i + lag];
+            c[lag] = sum;
+        }
+
+        // skip past the lobe still descending from lag zero
+        let d = minLag;
+        while (d < maxLag && c[d] > c[d + 1]) d++;
+        let maxval = -1, maxpos = -1;
+        for (let i = d; i <= maxLag; i++)
+            if (c[i] > maxval) { maxval = c[i]; maxpos = i; }
+        if (maxpos <= 0) return -1;
+
+        // clarity gate: normalise for the overlap shrinking with lag,
+        // then drop frames that aren't convincingly periodic
+        if (maxval / (energy * (n - maxpos) / n) < 0.85) return -1;
+
+        // parabolic interpolation around the peak
+        let T0 = maxpos;
+        if (maxpos > minLag && maxpos < maxLag) {
+            const x1 = c[maxpos - 1], x2 = c[maxpos], x3 = c[maxpos + 1];
+            const a = (x1 + x3 - 2 * x2) / 2;
+            const b = (x3 - x1) / 2;
+            if (a) T0 = maxpos - b / (2 * a);
+        }
+
+        return sampleRate / T0;
+    }
+
+    /* ---- pitch trace: cents on the meter's axis, time falling downward ---- */
+
+    const TRACE_LEN = 200;
+    const trace = [];
+
+    function pushTrace(cents) {
+        trace.push(cents);
+        if (trace.length > TRACE_LEN) trace.shift();
+    }
+
+    function drawTrace() {
+        const dpr = window.devicePixelRatio || 1;
+        const w = traceEl.clientWidth, h = traceEl.clientHeight;
+        if (traceEl.width !== w * dpr) { traceEl.width = w * dpr; traceEl.height = h * dpr; }
+        const g = traceEl.getContext('2d');
+        g.setTransform(dpr, 0, 0, dpr, 0, 0);
+        g.clearRect(0, 0, w, h);
+        g.lineWidth = 1;
+        for (let i = trace.length - 1; i > 0; i--) {
+            const a = trace[i - 1], b = trace[i];
+            if (a === null || b === null) continue;
+            const ageB = trace.length - 1 - i;
+            const fade = 1 - ageB / TRACE_LEN;
+            const tuned = Math.abs(a) <= TUNED_CENTS && Math.abs(b) <= TUNED_CENTS;
+            g.strokeStyle = tuned
+                ? 'rgba(138, 59, 82, ' + 0.8 * fade + ')'
+                : 'rgba(36, 41, 46, ' + 0.55 * fade + ')';
+            g.beginPath();
+            g.moveTo((50 + Math.max(-50, Math.min(50, a))) / 100 * w, (ageB + 1) / TRACE_LEN * h);
+            g.lineTo((50 + Math.max(-50, Math.min(50, b))) / 100 * w, ageB / TRACE_LEN * h);
+            g.stroke();
+        }
+    }
+
+    /* ---- rendering ---- */
+
+    let recent = [];
+    let smooth = null; // pitch in cents relative to A4, exponentially smoothed
+    let curMidi = null;
+    let misses = 0;
+
+    function render(freq) {
+        if (freq <= 0 || freq < 40 || freq > 2000) {
+            pushTrace(null);
+            drawTrace();
+            // hold the display through brief dropouts rather than flickering
+            if (++misses < 20) return;
+            recent = [];
+            smooth = null;
+            curMidi = null;
+            noteEl.classList.remove('live', 'tuned');
+            meterEl.classList.remove('live', 'tuned');
+            stringEls.forEach(s => s.classList.remove('near', 'tuned'));
+            return;
+        }
+        misses = 0;
+
+        // median of recent readings knocks out single-frame spikes
+        recent.push(freq);
+        if (recent.length > 5) recent.shift();
+        const sorted = [...recent].sort((a, b) => a - b);
+        const median = sorted[Math.floor(sorted.length / 2)];
+
+        // then ease toward the median; a big jump is a real note change, so snap
+        const pitch = 1200 * Math.log2(median / 440);
+        if (smooth === null || Math.abs(pitch - smooth) > 120) smooth = pitch;
+        else smooth += 0.2 * (pitch - smooth);
+        freq = 440 * Math.pow(2, smooth / 1200);
+
+        // stick with the current note until the pitch clearly leaves it,
+        // so a tone near a boundary doesn't flap between two names
+        let midi = curMidi;
+        if (midi === null || Math.abs(smooth - (midi - 69) * 100) > 60)
+            midi = Math.round(smooth / 100) + 69;
+        if (midi !== curMidi) pushTrace(null); // break the line on a note change
+        curMidi = midi;
+        const cents = Math.round(smooth - (midi - 69) * 100);
+        const name = NOTE_NAMES[((midi % 12) + 12) % 12];
+        const octave = Math.floor(midi / 12) - 1;
+        const tuned = Math.abs(cents) <= TUNED_CENTS;
+
+        pushTrace(smooth - (midi - 69) * 100);
+        drawTrace();
+
+        noteEl.innerHTML = name[0]
+            + (name[1] ? '<sup>&sharp;</sup>' : '')
+            + '<span class="octave">' + octave + '</span>';
+        noteEl.classList.add('live');
+        noteEl.classList.toggle('tuned', tuned);
+
+        meterEl.classList.add('live');
+        meterEl.classList.toggle('tuned', tuned);
+        const clamped = Math.max(-50, Math.min(50, cents));
+        needleEl.style.left = (50 + clamped) + '%';
+
+        centsEl.textContent = (cents > 0 ? '+' : '') + cents + '¢ · ' + freq.toFixed(1) + ' Hz';
+
+        stringEls.forEach(s => {
+            const near = +s.dataset.midi === midi;
+            s.classList.toggle('near', near && !tuned);
+            s.classList.toggle('tuned', near && tuned);
+        });
+    }
+
+    async function start() {
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({
+                audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false }
+            });
+            audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+            await audioCtx.resume();
+            const analyser = audioCtx.createAnalyser();
+            analyser.fftSize = 4096;
+            audioCtx.createMediaStreamSource(stream).connect(analyser);
+            const buf = new Float32Array(analyser.fftSize);
+
+            startBtn.style.display = 'none';
+            hintEl.innerHTML = '&nbsp;';
+
+            (function loop() {
+                analyser.getFloatTimeDomainData(buf);
+                render(detectPitch(buf, audioCtx.sampleRate));
+                requestAnimationFrame(loop);
+            })();
+        } catch (e) {
+            hintEl.textContent = 'microphone unavailable — check permissions';
+        }
+    }
+
+    startBtn.addEventListener('click', start);
+
+    // offline copy for the installed app; skipped during local dev
+    if ('serviceWorker' in navigator && location.protocol === 'https:')
+        navigator.serviceWorker.register('/tuner/sw.js');
+
+    // dev hook: /tuner/?f=331&i=guitar renders that frequency (with a gentle
+    // wobble so the trace and needle come alive) without a microphone
+    const params = new URLSearchParams(location.search);
+    if (TUNINGS[params.get('i')]) selectInstrument(params.get('i'));
+    const f = parseFloat(params.get('f'));
+    if (f) {
+        startBtn.style.display = 'none';
+        let frames = 0;
+        const step = () => {
+            const t = frames++ / 60;
+            const wobble = 6 * Math.sin(2 * Math.PI * 0.7 * t) + (Math.random() - 0.5) * 3;
+            render(f * Math.pow(2, wobble / 1200));
+        };
+        for (let i = 0; i < TRACE_LEN; i++) step(); // arrive with a full trail
+        (function demo() {
+            step();
+            requestAnimationFrame(demo);
+        })();
+    }
+</script>
