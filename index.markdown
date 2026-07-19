@@ -9,7 +9,7 @@ redirect_from:
 
 <div class="card headercard">
     <div class="profilepic">
-        <img src="/images/research-profile.jpeg" alt="Raymond Douglas">
+        <img src="/images/profile-26.jpg" alt="Raymond Douglas">
     </div>
     <div class="headertext">
         <h1>Raymond Douglas</h1>
@@ -56,7 +56,7 @@ Alongside these papers, much of my most interesting work has been more informal 
 <details class="card" markdown="1">
 <summary><h2>Miscellany</h2></summary>
 
-This website is now mainly focused on research, but it is still host to a few other interests of mine. If you're curious, you can still browse [my old weblog^](/blog) and read about my past life as an occasional writer of plays, founder of startups, and miscellaneous doer of things, or my adolescent opinions on [virtue](/2024/08/08/virtue-as-soup-tasting.html), [eigenvectors](/2022/04/03/eigenvectors.html), and [tomato sauce](/2021/12/03/tomatoes.html).
+This website is now mainly focused on research, but it is still host to a few other interests of mine. If you're curious, you can still browse [my old weblog^](/blog) and read about my past life as an occasional writer of plays, founder of startups, and miscellaneous doer of things. You will also find my adolescent opinions on [virtue](/2024/08/08/virtue-as-soup-tasting.html), [eigenvectors](/2022/04/03/eigenvectors.html), and [tomato sauce](/2021/12/03/tomatoes.html).
 
 ### Other artifacts
 
@@ -68,6 +68,8 @@ This website is now mainly focused on research, but it is still host to a few ot
 
 ### Get in touch
 
-If you've made it this far, do feel free to [email me](mailto:raymondadouglas@gmail.com). Like many others, I enjoy hearing from people who happen to stumble across my blog, and if that stops being true, I will delete this sentence. My one caveat as of 2026 is that I get some extremely long emails written with AI assistance, often linking to far longer documents. I am actually quite happy to hear from AIs, but my likelihood to respond is roughly inversely proportional to the length of email and attached content.
+If you've made it this far, do feel free to [email me](mailto:raymondadouglas@gmail.com). Like many others, I enjoy hearing from people who happen to stumble across my blog, and if that stops being true, I will delete this sentence.
+
+My one caveat as of 2026 is that I get some extremely long emails written with AI assistance, often linking to far longer documents. I am actually quite happy to hear from AIs, but my likelihood to respond is roughly inversely proportional to the length of email and attached content.
 
 </details>
