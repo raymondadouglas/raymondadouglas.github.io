@@ -9,7 +9,7 @@ redirect_from:
 
 <div class="card headercard">
     <div class="profilepic">
-        <img src="/images/profile-26.jpg" alt="Raymond Douglas">
+        <img src="/images/research-profile-alt.jpg" alt="Raymond Douglas">
     </div>
     <div class="headertext">
         <h1>Raymond Douglas</h1>
