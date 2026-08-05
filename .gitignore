@@ -1,4 +1,5 @@
 _site
+.cotw-scan-cache
 .sass-cache
 .jekyll-cache
 .jekyll-metadata
