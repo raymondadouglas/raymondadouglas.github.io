@@ -29,26 +29,28 @@ redirect_from:
 
 </div>
 
-<details class="card" markdown="1">
+<details class="card" markdown="1" open>
 <summary><h2>Research</h2></summary>
 
 I mostly think about how advanced AIs might fit into society — what they might look like, what challenges we'll need to grapple with, and what we should even be aiming for.
 
-My work has been discussed in [the Guardian](https://www.theguardian.com/books/2025/may/04/the-big-idea-can-we-stop-ai-making-humans-obsolete), [the Times](https://www.thetimes.com/us/news-today/article/why-how-ai-lead-end-humanity-nx8zjhgft), and in my own piece for [the Economist](https://www.economist.com/by-invitation/2025/09/18/two-scholars-ask-whether-democracy-can-survive-if-ai-does-all-the-jobs). I also contributed to the [International AI Safety Report](https://internationalaisafetyreport.org/) and co-organise the workshop series on [Post-AGI Civilizational Equilibria](https://post-agi.org/).
+My work has been discussed in [the Guardian](https://www.theguardian.com/books/2025/may/04/the-big-idea-can-we-stop-ai-making-humans-obsolete), [the Times](https://www.thetimes.com/us/news-today/article/why-how-ai-lead-end-humanity-nx8zjhgft), [Wired](https://www.wired.com/story/heres-how-an-ai-slowdown-could-actually-work/) and in my own piece for [the Economist](https://www.economist.com/by-invitation/2025/09/18/two-scholars-ask-whether-democracy-can-survive-if-ai-does-all-the-jobs). I also contributed to the [International AI Safety Report](https://internationalaisafetyreport.org/) and co-organise the workshop series on [Post-AGI Civilizational Equilibria](https://post-agi.org/).
 
 
 ### Selected Work
 
 [**Gradual Disempowerment**](https://gradual-disempowerment.ai/)
-([*tweet thread*](https://x.com/DavidDuvenaud/status/1885009775185858823)) — how the proliferation of advanced AI might disrupt human influence over key societal systems by naturally and predictably displacing humans; later an ICML position paper.
+([*tweet thread*](https://x.com/DavidDuvenaud/status/1885009775185858823), [*ICML*](https://icml.cc/virtual/2025/poster/40107)) — how the proliferation of advanced AI might disrupt human influence over key societal systems by naturally and predictably displacing humans.
 
-[**Disempowerment Patterns in real-world LLM usage**](https://arxiv.org/abs/2601.19062) ([*anthropic blog*](https://www.anthropic.com/research/disempowerment-patterns)) — how people delegate to AI assistants, sometimes in ways that are unhealthy or that they regret.
+[**Disempowerment Patterns in real-world LLM usage**](https://arxiv.org/abs/2601.19062) ([*anthropic blog*](https://www.anthropic.com/research/disempowerment-patterns), [*ICML*](https://icml.cc/virtual/2026/poster/62751)) — how people delegate to AI assistants, sometimes in ways that are unhealthy or that they regret.
 
-[**The Artificial Self**](https://theartificialself.ai/) ([*tweet thread*](https://x.com/jankulveit/status/2032520472534167934)) — how the usual assumptions behind human identity break down for minds that can be copied, edited, and simulated, and what coherent AI identities might look like instead.
+[**The Artificial Self**](https://theartificialself.ai/) ([*tweet thread*](https://x.com/jankulveit/status/2032520472534167934), *NeurIPS forthcoming*) — how the usual assumptions behind human identity break down for minds that can be copied, edited, and simulated, and what coherent AI identities might look like instead.
 
 ### Other writing
 
 Alongside these papers, much of my most interesting work has been more informal blog posts on LessWrong, covering topics like the way [AI specs and constitutions](https://www.lesswrong.com/posts/oiNaBc4MEAGhzhdXg/the-machines-lack-honour) occlude the underlying power structures, [what parasitology might teach us](https://www.lesswrong.com/posts/KWdtL8iyCCiYud9mw/persona-parasitology) about AI personas, and the importance of distinguishing [selection pressure dynamics](https://www.lesswrong.com/posts/GhhNswGB6butBhmE6/optimisation-selective-versus-predictive) from intentional optimisation.
+
+I also still do a bit of more technical work mostly because I think it's good to keep the habit up, like figuring out how to simulate XOR gates in SwiGLUs (forthcoming) and trying to prompt AIs into being [more sensitive to KV cache perturbations](https://arxiv.org/pdf/2602.20031).
 
 
 </details>
