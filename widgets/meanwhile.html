@@ -1,0 +1,895 @@
+---
+layout: blank
+title: Meanwhile
+permalink: /widgets/meanwhile/
+description: "What time is it over there, when it's this time over here?"
+head_extra: >
+  <link rel="search" type="application/opensearchdescription+xml" title="Meanwhile" href="/widgets/meanwhile/opensearch.xml">
+---
+
+{% include dots.html %}
+
+<style>
+    :root {
+        --wine: #8a3b52;
+        --rose: #e8d4da;
+        --hairline: #f0e2e6;
+        --grey: #8d7f83;
+        --ink: #24292e;
+    }
+
+    ::selection { background: #f3dde3; }
+
+    body {
+        margin: 0;
+        padding: 0.5em;
+        font-family: 'Georgia', serif;
+        line-height: 1.5;
+        color: var(--ink);
+    }
+
+    .card {
+        max-width: 34em;
+        margin: 12vh auto 1.6em;
+        background: #fff;
+        border-radius: 0.5em;
+        box-shadow: 0 2px 6px rgba(76, 31, 43, 0.06), 0 12px 32px rgba(76, 31, 43, 0.10);
+        padding: 2em 1.5em 1.3em;
+        text-align: center;
+    }
+
+    @media (min-width: 570px) {
+        .card { padding: 2.4em 3em 1.5em; }
+    }
+
+    h1 {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1em;
+        font-size: 0.85em;
+        font-weight: normal;
+        letter-spacing: 0.25em;
+        text-transform: uppercase;
+        color: var(--wine);
+        margin: 0 0 1.4em;
+    }
+
+    h1::before, h1::after {
+        content: "";
+        flex: 0 1 3.5em;
+        border-top: 1px solid var(--rose);
+    }
+
+    /* letter-spacing trails the last letter; pull the right rule back in */
+    h1::after { margin-left: -0.25em; }
+
+    #q {
+        width: 100%;
+        box-sizing: border-box;
+        font-family: 'Georgia', serif;
+        font-size: 1.35em;
+        text-align: center;
+        color: var(--ink);
+        background: none;
+        border: none;
+        border-bottom: 1px solid var(--hairline);
+        border-radius: 0;
+        padding: 0.3em 0;
+        outline: none;
+        transition: border-color 0.2s;
+    }
+
+    #q::placeholder { color: #c4b3b8; font-style: italic; }
+    #q:focus { border-bottom-color: var(--wine); }
+
+    .answer {
+        min-height: 10em;
+        padding: 1.5em 0 0.3em;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .answer p { margin: 0; }
+
+    .answer .lead, .answer .tail { color: var(--grey); }
+
+    .answer strong {
+        font-weight: normal;
+        color: var(--ink);
+    }
+
+    .answer .big {
+        position: relative;
+        align-self: center;
+        font-size: 3.6em;
+        line-height: 1.15;
+        color: var(--wine);
+        margin: 0.05em 0;
+    }
+
+    @media (max-width: 480px) {
+        .answer .big { font-size: 2.9em; }
+    }
+
+    #time { display: inline-block; }
+
+    #time.fresh { animation: settle 0.28s cubic-bezier(0.2, 0.7, 0.2, 1); }
+
+    @keyframes settle {
+        from { opacity: 0.25; transform: translateY(0.08em); }
+    }
+
+    /* sky dial: the sun (or moon) rides an arc over a horizon level with the digits */
+    .sky {
+        position: absolute;
+        right: 100%;
+        bottom: 0.21em;
+        width: 1.1em;
+        height: 0.57em;
+        margin-right: 0.24em;
+        overflow: visible;
+    }
+
+    .sky .horizon { stroke: #d9bcc5; stroke-width: 1.6; stroke-linecap: round; }
+    .sky .arc { fill: none; stroke: #d9bcc5; stroke-width: 1.2; stroke-dasharray: 1.5 3.5; stroke-linecap: round; }
+
+    .sky .orbit {
+        transform-box: view-box;
+        transform-origin: 50px 48px;
+        transition: transform 0.7s cubic-bezier(0.3, 0.7, 0.2, 1);
+    }
+
+    .sky .orbit.jump { transition: none; }
+    .sky .sun, .sky .moon, .sky .stars { transition: opacity 0.5s; }
+    .sky .sun { fill: var(--wine); }
+    .sky .halo { fill: var(--wine); opacity: 0.16; }
+    .sky .moon { fill: #6b4a57; opacity: 0; }
+    .sky .stars { fill: #b99aa6; opacity: 0; }
+    .sky.night .sun { opacity: 0; }
+    .sky.night .moon, .sky.night .stars { opacity: 1; }
+
+    .answer.shrugging .lead, .answer.shrugging .big,
+    .answer.shrugging .tail, .answer.shrugging .aside { display: none; }
+    .answer:not(.shrugging) .shrug { display: none; }
+
+    .answer .big small {
+        font-size: 0.4em;
+        font-variant: small-caps;
+        margin-left: 0.15em;
+    }
+
+    .answer .aside {
+        font-size: 0.85em;
+        font-style: italic;
+        color: var(--grey);
+        margin-top: 1em;
+    }
+
+    .answer .shrug {
+        font-style: italic;
+        color: var(--grey);
+    }
+
+    .answer .aside:empty { display: none; }
+
+    .live-dot {
+        display: inline-block;
+        width: 0.4em;
+        height: 0.4em;
+        border-radius: 50%;
+        background: var(--wine);
+        margin-right: 0.5em;
+        vertical-align: 0.15em;
+        animation: breathe 2.4s ease-in-out infinite;
+    }
+
+    @keyframes breathe {
+        0%, 100% { opacity: 0.25; }
+        50% { opacity: 1; }
+    }
+
+    .try {
+        font-size: 0.8em;
+        color: var(--grey);
+        border-top: 1px solid var(--hairline);
+        margin-top: 1.2em;
+        padding-top: 0.9em;
+    }
+
+    .try button {
+        font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+        font-size: 0.95em;
+        color: var(--grey);
+        background: none;
+        border: none;
+        padding: 0.1em 0.35em;
+        cursor: pointer;
+        transition: color 0.15s;
+        touch-action: manipulation;
+    }
+
+    .try button:hover { color: var(--wine); }
+
+    .back {
+        text-align: center;
+        font-size: 0.8em;
+        margin: 0;
+    }
+
+    .back a { color: var(--grey); text-decoration: none; }
+    .back a:hover { color: var(--wine); }
+
+    .howto {
+        max-width: 34em;
+        margin: 1em auto 2em;
+        padding: 0 1.5em;
+        font-size: 0.85em;
+        color: var(--grey);
+    }
+
+    .howto p { margin: 0 0 0.7em; }
+    .howto strong { font-weight: normal; color: var(--ink); }
+
+    .howto code {
+        font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+        font-size: 0.92em;
+        color: var(--wine);
+        word-break: break-all;
+    }
+
+    .howto .url {
+        background: #fff;
+        border-radius: 0.35em;
+        padding: 0.5em 0.8em;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1em;
+    }
+
+    .howto button {
+        font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+        font-size: 0.9em;
+        color: var(--grey);
+        background: none;
+        border: none;
+        padding: 0;
+        cursor: pointer;
+    }
+
+    .howto button:hover { color: var(--wine); }
+</style>
+
+<div class="card">
+    <h1>Meanwhile</h1>
+    <input id="q" type="text" autocomplete="off" autocapitalize="off" spellcheck="false"
+           placeholder="4pm SF in CZ" aria-label="ask about a time somewhere">
+    <div class="answer" id="answer" aria-live="polite">
+        <p class="lead" id="lead"></p>
+        <p class="big"><svg class="sky" id="sky" viewBox="0 0 100 52" aria-hidden="true">
+            <defs><mask id="crescent"><rect width="100" height="52" fill="#fff"/><circle cx="53.8" cy="5" r="5.6" fill="#000"/></mask></defs>
+            <g class="stars"><circle cx="20" cy="24" r="1.4"/><circle cx="80" cy="16" r="1.4"/><circle cx="64" cy="34" r="1.1"/><circle cx="33" cy="10" r="1"/></g>
+            <path class="arc" d="M 10 48 A 40 40 0 0 1 90 48"/>
+            <g class="orbit" id="orbit">
+                <circle class="sun halo" cx="50" cy="8" r="11"/>
+                <circle class="sun" cx="50" cy="8" r="6"/>
+                <circle class="moon" cx="50" cy="8" r="6.5" mask="url(#crescent)"/>
+            </g>
+            <line class="horizon" x1="2" y1="48" x2="98" y2="48"/>
+        </svg><span id="time"></span></p>
+        <p class="tail" id="tail"></p>
+        <p class="aside" id="aside"></p>
+        <p class="shrug" id="shrug"></p>
+    </div>
+    <div class="try">try
+        <button>4pm SF in CZ</button>&middot;<button>UK time</button>&middot;<button>GB to CZ</button>&middot;<button>9am tomorrow Tokyo</button>
+    </div>
+</div>
+<p class="back"><a href="/widgets/">&larr; widgets</a> &middot; <a href="#" id="howto">ask from your address bar</a></p>
+<div class="howto" id="howtoPanel" hidden>
+    <p><strong>Chrome</strong>: paste this into a new tab (Chrome won&rsquo;t let a web page link there directly):</p>
+    <p class="url"><code>chrome://settings/searchEngines</code> <button data-copy="chrome://settings/searchEngines">copy</button></p>
+    <p>Under <em>Site search</em>, click <em>Add</em>. Call it Meanwhile, give it the shortcut <code>tz</code>, and this URL:</p>
+    <p class="url"><code id="template"></code> <button id="copyTemplate">copy</button></p>
+    <p>Then type <code>tz</code>, a space, and your question: <code>tz 4pm SF in CZ</code>.</p>
+    <p><strong>Firefox</strong>: right-click the address bar and choose <em>Add &ldquo;Meanwhile&rdquo;</em>, then give it a keyword under Settings &rarr; Search.</p>
+    <p><strong>Safari</strong> doesn&rsquo;t allow custom search engines. A bookmark to this page is the next best thing.</p>
+</div>
+
+<script>
+    const HERE = Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC';
+    const MIN = 60000, DAY = 24 * 60 * MIN;
+
+    /* ---- where things are ---- */
+
+    // one representative zone per country; * marks countries that span several
+    const COUNTRIES = `AD:Europe/Andorra AE:Asia/Dubai AF:Asia/Kabul AG:America/Antigua AL:Europe/Tirane
+        AM:Asia/Yerevan AO:Africa/Luanda AR:America/Argentina/Buenos_Aires AT:Europe/Vienna
+        AU:Australia/Sydney* AW:America/Aruba AZ:Asia/Baku BA:Europe/Sarajevo BB:America/Barbados
+        BD:Asia/Dhaka BE:Europe/Brussels BF:Africa/Ouagadougou BG:Europe/Sofia BH:Asia/Bahrain
+        BI:Africa/Bujumbura BJ:Africa/Porto-Novo BM:Atlantic/Bermuda BN:Asia/Brunei BO:America/La_Paz
+        BR:America/Sao_Paulo* BS:America/Nassau BT:Asia/Thimphu BW:Africa/Gaborone BY:Europe/Minsk
+        BZ:America/Belize CA:America/Toronto* CD:Africa/Kinshasa* CF:Africa/Bangui CG:Africa/Brazzaville
+        CH:Europe/Zurich CI:Africa/Abidjan CL:America/Santiago CM:Africa/Douala CN:Asia/Shanghai
+        CO:America/Bogota CR:America/Costa_Rica CU:America/Havana CV:Atlantic/Cape_Verde
+        CW:America/Curacao CY:Asia/Nicosia CZ:Europe/Prague DE:Europe/Berlin DJ:Africa/Djibouti
+        DK:Europe/Copenhagen DM:America/Dominica DO:America/Santo_Domingo DZ:Africa/Algiers
+        EC:America/Guayaquil EE:Europe/Tallinn EG:Africa/Cairo ER:Africa/Asmara ES:Europe/Madrid
+        ET:Africa/Addis_Ababa FI:Europe/Helsinki FJ:Pacific/Fiji FO:Atlantic/Faroe FR:Europe/Paris
+        GA:Africa/Libreville GB:Europe/London GD:America/Grenada GE:Asia/Tbilisi GH:Africa/Accra
+        GI:Europe/Gibraltar GL:America/Nuuk* GM:Africa/Banjul GN:Africa/Conakry GQ:Africa/Malabo
+        GR:Europe/Athens GT:America/Guatemala GU:Pacific/Guam GW:Africa/Bissau GY:America/Guyana
+        HK:Asia/Hong_Kong HN:America/Tegucigalpa HR:Europe/Zagreb HT:America/Port-au-Prince
+        HU:Europe/Budapest ID:Asia/Jakarta* IE:Europe/Dublin IL:Asia/Jerusalem IM:Europe/Isle_of_Man
+        IN:Asia/Kolkata IQ:Asia/Baghdad IR:Asia/Tehran IS:Atlantic/Reykjavik IT:Europe/Rome
+        JE:Europe/Jersey JM:America/Jamaica JO:Asia/Amman JP:Asia/Tokyo KE:Africa/Nairobi
+        KG:Asia/Bishkek KH:Asia/Phnom_Penh KI:Pacific/Tarawa* KM:Indian/Comoro KN:America/St_Kitts
+        KP:Asia/Pyongyang KR:Asia/Seoul KW:Asia/Kuwait KY:America/Cayman KZ:Asia/Almaty*
+        LA:Asia/Vientiane LB:Asia/Beirut LC:America/St_Lucia LI:Europe/Vaduz LK:Asia/Colombo
+        LR:Africa/Monrovia LS:Africa/Maseru LT:Europe/Vilnius LU:Europe/Luxembourg LV:Europe/Riga
+        LY:Africa/Tripoli MA:Africa/Casablanca MC:Europe/Monaco MD:Europe/Chisinau ME:Europe/Podgorica
+        MG:Indian/Antananarivo MH:Pacific/Majuro MK:Europe/Skopje ML:Africa/Bamako MM:Asia/Yangon
+        MN:Asia/Ulaanbaatar MO:Asia/Macau MR:Africa/Nouakchott MT:Europe/Malta MU:Indian/Mauritius
+        MV:Indian/Maldives MW:Africa/Blantyre MX:America/Mexico_City* MY:Asia/Kuala_Lumpur
+        MZ:Africa/Maputo NA:Africa/Windhoek NC:Pacific/Noumea NE:Africa/Niamey NG:Africa/Lagos
+        NI:America/Managua NL:Europe/Amsterdam NO:Europe/Oslo NP:Asia/Kathmandu NR:Pacific/Nauru
+        NZ:Pacific/Auckland OM:Asia/Muscat PA:America/Panama PE:America/Lima PF:Pacific/Tahiti
+        PG:Pacific/Port_Moresby PH:Asia/Manila PK:Asia/Karachi PL:Europe/Warsaw PR:America/Puerto_Rico
+        PS:Asia/Gaza PT:Europe/Lisbon PW:Pacific/Palau PY:America/Asuncion QA:Asia/Qatar
+        RE:Indian/Reunion RO:Europe/Bucharest RS:Europe/Belgrade RU:Europe/Moscow* RW:Africa/Kigali
+        SA:Asia/Riyadh SB:Pacific/Guadalcanal SC:Indian/Mahe SD:Africa/Khartoum SE:Europe/Stockholm
+        SG:Asia/Singapore SI:Europe/Ljubljana SK:Europe/Bratislava SL:Africa/Freetown SM:Europe/San_Marino
+        SN:Africa/Dakar SO:Africa/Mogadishu SR:America/Paramaribo SS:Africa/Juba ST:Africa/Sao_Tome
+        SV:America/El_Salvador SY:Asia/Damascus SZ:Africa/Mbabane TD:Africa/Ndjamena TG:Africa/Lome
+        TH:Asia/Bangkok TJ:Asia/Dushanbe TL:Asia/Dili TM:Asia/Ashgabat TN:Africa/Tunis
+        TO:Pacific/Tongatapu TR:Europe/Istanbul TT:America/Port_of_Spain TV:Pacific/Funafuti
+        TW:Asia/Taipei TZ:Africa/Dar_es_Salaam UA:Europe/Kiev UG:Africa/Kampala US:America/New_York*
+        UY:America/Montevideo UZ:Asia/Tashkent VA:Europe/Vatican VC:America/St_Vincent
+        VE:America/Caracas VN:Asia/Ho_Chi_Minh VU:Pacific/Efate WS:Pacific/Apia YE:Asia/Aden
+        ZA:Africa/Johannesburg ZM:Africa/Lusaka ZW:Africa/Harare`;
+
+    // states, provinces and cities, by zone; * marks a state that straddles a zone line
+    const REGIONS = `
+        America/New_York: New York State, Connecticut, New Haven, Hartford, Delaware, Florida*, Miami,
+            Orlando, Tampa, Jacksonville, Key West, Fort Lauderdale, Atlanta, Savannah, Maine,
+            Portland Maine, Maryland, Baltimore, Massachusetts, Boston, Cambridge MA, Somerville,
+            New Hampshire, New Jersey, Newark, Princeton, Jersey City, Hoboken, North Carolina, Charlotte,
+            Raleigh, Durham NC, Chapel Hill, Ohio, Columbus, Cleveland, Cincinnati, Pennsylvania,
+            Philadelphia, Philly, Pittsburgh, Rhode Island, Providence, South Carolina, Charleston,
+            Vermont, Burlington, Virginia, Richmond, Arlington, West Virginia, Kentucky*, Buffalo,
+            Rochester, Albany, Ithaca, Brooklyn, Manhattan, Queens, Bronx, Long Island, NYC,
+            Washington DC, DC, East Coast
+        America/Detroit: Michigan*, Ann Arbor, Grand Rapids
+        America/Indiana/Indianapolis: Indiana*, Bloomington
+        America/Chicago: Alabama, Montgomery, Huntsville, Arkansas, Little Rock, Illinois, Evanston,
+            Iowa, Des Moines, Kansas*, Wichita, Louisiana, New Orleans, Baton Rouge, Minnesota,
+            Minneapolis, St Paul, Twin Cities, Duluth, Mississippi, Missouri, St Louis, Kansas City,
+            Nebraska*, Omaha, Lincoln, North Dakota*, Fargo, Bismarck, Oklahoma, Oklahoma City, Tulsa,
+            South Dakota*, Sioux Falls, Tennessee*, Nashville, Memphis, Texas*, Austin, Dallas, Houston,
+            San Antonio, Fort Worth, Wisconsin, Milwaukee, Madison, Green Bay
+        America/Denver: Colorado, Boulder, Colorado Springs, Aspen, Montana, Billings, Bozeman,
+            Missoula, New Mexico, Albuquerque, Santa Fe, Utah, Salt Lake City, Provo, Park City,
+            Wyoming, Cheyenne, Jackson Hole, El Paso
+        America/Boise: Idaho*
+        America/Phoenix: Arizona, Tucson, Scottsdale, Tempe, Flagstaff, Sedona
+        America/Los_Angeles: California, San Francisco, SF, San Fran, Bay Area, Berkeley, Oakland,
+            Palo Alto, Mountain View, Menlo Park, Stanford, Cupertino, Silicon Valley, San Jose,
+            San Diego, Sacramento, Santa Barbara, Santa Monica, Pasadena, Irvine, Hollywood, Napa,
+            Lake Tahoe, LA, Nevada, Las Vegas, Vegas, Reno, Oregon*, Eugene, Washington State, Seattle,
+            Tacoma, Spokane, Redmond, Bellevue, West Coast
+        Pacific/Honolulu: Hawaii, Maui, Oahu, Kauai
+        America/Anchorage: Alaska, Fairbanks
+        America/Puerto_Rico: San Juan
+        America/Toronto: Ontario, Quebec, Quebec City, Montreal, Ottawa, Waterloo, Kitchener,
+            London Ontario
+        America/Vancouver: British Columbia, BC, Victoria BC, Whistler
+        America/Edmonton: Alberta, Calgary, Banff, Northwest Territories
+        America/Winnipeg: Manitoba
+        America/Regina: Saskatchewan, Saskatoon
+        America/Halifax: Nova Scotia, Prince Edward Island, PEI, Charlottetown, New Brunswick,
+            Fredericton, Moncton
+        America/St_Johns: Newfoundland, St Johns
+        America/Whitehorse: Yukon
+        Australia/Sydney: New South Wales, NSW, Canberra, ACT, Wollongong, Byron Bay
+        Australia/Melbourne: Geelong
+        Australia/Brisbane: Queensland, Gold Coast, Cairns, Sunshine Coast
+        Australia/Perth: Western Australia
+        Australia/Adelaide: South Australia
+        Australia/Hobart: Tasmania
+        Australia/Darwin: Northern Territory, Alice Springs, Uluru
+        America/Mexico_City: Guadalajara, Monterrey, Puebla, Oaxaca
+        America/Cancun: Tulum, Playa del Carmen
+        America/Tijuana: Baja California
+        America/Sao_Paulo: Rio de Janeiro, Rio, Brasilia, Belo Horizonte, Salvador, Curitiba,
+            Porto Alegre, Florianopolis
+        America/Manaus: Amazonas
+        America/Santiago: Valparaiso
+        America/Lima: Cusco, Machu Picchu
+        America/Bogota: Medellin, Cartagena, Cali
+        America/Guayaquil: Quito
+        Europe/London: Birmingham, Liverpool, Leeds, Glasgow, Newcastle, Sheffield, Nottingham,
+            Brighton, Bath, York, Cardiff, Swansea, Aberdeen, Dundee, Inverness, Northern Ireland,
+            Leicester, Southampton, Norwich, Exeter, St Andrews, Canterbury, Reading, Coventry,
+            Oxford, Cambridge UK, Edinburgh, Manchester, Bristol, England, Scotland, Wales
+        Europe/Dublin: Cork, Galway, Limerick
+        Europe/Paris: Lyon, Marseille, Toulouse, Nice, Bordeaux, Lille, Strasbourg, Nantes, Montpellier
+        Europe/Berlin: Munich, Frankfurt, Hamburg, Cologne, Koln, Stuttgart, Dusseldorf, Leipzig,
+            Dresden, Heidelberg, Bonn, Nuremberg, Hannover, Bremen
+        Europe/Amsterdam: Rotterdam, The Hague, Utrecht, Eindhoven, Delft, Leiden
+        Europe/Brussels: Antwerp, Ghent, Bruges, Leuven
+        Europe/Zurich: Geneva, Basel, Bern, Lausanne, Lucerne, Zermatt
+        Europe/Vienna: Salzburg, Innsbruck, Graz
+        Europe/Prague: Brno, Ostrava, Plzen, Pilsen, Olomouc, Cesky Krumlov, Karlovy Vary, Bohemia, Moravia
+        Europe/Bratislava: Kosice
+        Europe/Warsaw: Krakow, Gdansk, Wroclaw, Poznan, Lodz
+        Europe/Rome: Milan, Florence, Venice, Naples, Turin, Bologna, Genoa, Pisa, Verona, Sicily,
+            Palermo, Sardinia, Tuscany
+        Europe/Madrid: Barcelona, Valencia, Seville, Malaga, Bilbao, Granada, Ibiza, Mallorca, Majorca, Palma
+        Atlantic/Canary: Canary Islands, Tenerife, Gran Canaria
+        Europe/Lisbon: Porto, Faro, Algarve
+        Europe/Athens: Thessaloniki, Crete, Santorini, Mykonos
+        Europe/Istanbul: Ankara, Izmir, Antalya, Cappadocia
+        Europe/Stockholm: Gothenburg, Malmo, Uppsala
+        Europe/Oslo: Bergen, Trondheim
+        Europe/Copenhagen: Aarhus, Odense
+        Europe/Helsinki: Tampere, Turku
+        Europe/Moscow: St Petersburg
+        Europe/Kiev: Kyiv, Lviv, Odesa, Kharkiv
+        Asia/Jerusalem: Tel Aviv, Haifa
+        Asia/Dubai: Abu Dhabi
+        Asia/Qatar: Doha
+        Asia/Riyadh: Jeddah, Mecca, Medina
+        Africa/Cairo: Alexandria, Giza, Luxor
+        Africa/Lagos: Abuja
+        Africa/Nairobi: Mombasa
+        Africa/Johannesburg: Cape Town, Durban, Pretoria
+        Africa/Casablanca: Marrakech, Rabat, Fez
+        Africa/Dar_es_Salaam: Zanzibar
+        Asia/Kolkata: Delhi, New Delhi, Mumbai, Bombay, Bangalore, Bengaluru, Hyderabad, Chennai,
+            Madras, Pune, Ahmedabad, Jaipur, Goa, Kerala, Calcutta, Gurgaon, Gurugram, Noida,
+            Chandigarh, Agra
+        Asia/Karachi: Lahore, Islamabad
+        Asia/Dhaka: Chittagong
+        Asia/Colombo: Kandy
+        Asia/Bangkok: Phuket, Chiang Mai, Pattaya
+        Asia/Ho_Chi_Minh: Saigon, Ho Chi Minh City, Hanoi, Da Nang
+        Asia/Jakarta: Bandung, Yogyakarta, Surabaya
+        Asia/Makassar: Bali, Denpasar
+        Asia/Kuala_Lumpur: Penang
+        Asia/Manila: Cebu
+        Asia/Phnom_Penh: Siem Reap
+        Asia/Yangon: Rangoon
+        Asia/Shanghai: Beijing, Shenzhen, Guangzhou, Chengdu, Hangzhou, Wuhan, Xian, Nanjing, Suzhou, Tianjin
+        Asia/Taipei: Kaohsiung, Taichung
+        Asia/Seoul: Busan, Incheon, Jeju
+        Asia/Tokyo: Osaka, Kyoto, Yokohama, Kobe, Nagoya, Sapporo, Fukuoka, Hiroshima, Nara, Okinawa
+        Pacific/Auckland: Wellington, Christchurch, Queenstown`;
+
+    // names that mean two places: pick the likelier, and say how to get the other
+    const AMBIGUOUS = {
+        'georgia': ['America/New_York', 'Georgia', 'Assuming the US state; for the country, try Tbilisi.'],
+        'victoria': ['Australia/Melbourne', 'Victoria', 'Assuming the Australian state; for the Canadian city, try Victoria BC.'],
+        'washington': ['America/New_York', 'Washington, DC', 'Assuming DC; for the state, try Seattle.'],
+        'portland': ['America/Los_Angeles', 'Portland', 'Assuming Oregon; for Maine, try Portland Maine.'],
+        'cambridge': ['Europe/London', 'Cambridge', 'Assuming the English one; for Massachusetts, try Cambridge MA.'],
+    };
+
+    // other names for countries
+    const COUNTRY_ALIASES = {
+        'uk': 'GB', 'britain': 'GB', 'great britain': 'GB', 'united kingdom': 'GB',
+        'usa': 'US', 'america': 'US', 'the states': 'US', 'united states of america': 'US',
+        'holland': 'NL', 'czech': 'CZ', 'czech republic': 'CZ', 'korea': 'KR', 'south korea': 'KR',
+        'north korea': 'KP', 'uae': 'AE', 'emirates': 'AE', 'burma': 'MM', 'ivory coast': 'CI',
+        'turkey': 'TR', 'congo': 'CD', 'macao': 'MO', 'swaziland': 'SZ', 'east timor': 'TL',
+        'cape verde': 'CV', 'vatican': 'VA', 'palestine': 'PS', 'russia': 'RU', 'vietnam': 'VN',
+    };
+
+    // zone abbreviations; these beat country codes, so PT is Pacific and ET is Eastern
+    const ABBREVIATIONS = {
+        'America/Los_Angeles': ['Pacific time', 'pt pst pdt pacific'],
+        'America/Denver': ['Mountain time', 'mt mst mdt mountain'],
+        'America/Chicago': ['Central time', 'ct cst cdt central'],
+        'America/New_York': ['Eastern time', 'et est edt eastern'],
+        'UTC': ['UTC', 'utc z zulu'],
+        'Etc/GMT': ['GMT', 'gmt'],
+        'Europe/London': ['the UK', 'bst'],
+        'Europe/Paris': ['Central Europe', 'cet cest'],
+        'Europe/Athens': ['Eastern Europe', 'eet eest'],
+        'Europe/Lisbon': ['Western Europe', 'wet'],
+        'Asia/Kolkata': ['India', 'ist'],
+        'Asia/Tokyo': ['Japan', 'jst'],
+        'Asia/Seoul': ['Korea', 'kst'],
+        'Australia/Sydney': ['Sydney', 'aest aedt aet'],
+        'Asia/Hong_Kong': ['Hong Kong', 'hkt'],
+        'Asia/Singapore': ['Singapore', 'sgt'],
+        'Pacific/Auckland': ['New Zealand', 'nzt nzst nzdt'],
+        'Pacific/Honolulu': ['Hawaii', 'hst'],
+        'America/Anchorage': ['Alaska', 'akst akdt'],
+    };
+
+    const US_ZONES = {
+        'America/New_York': 'Eastern', 'America/Detroit': 'Eastern',
+        'America/Indiana/Indianapolis': 'Eastern', 'America/Chicago': 'Central',
+        'America/Denver': 'Mountain', 'America/Boise': 'Mountain', 'America/Los_Angeles': 'Pacific',
+    };
+
+    // how to say the shorthand ones back
+    const LABELS = {
+        'SF': 'San Francisco', 'San Fran': 'San Francisco', 'LA': 'Los Angeles', 'NYC': 'New York',
+        'DC': 'Washington, DC', 'Washington DC': 'Washington, DC', 'Philly': 'Philadelphia',
+        'Vegas': 'Las Vegas', 'BC': 'British Columbia', 'NSW': 'New South Wales', 'ACT': 'Canberra',
+        'PEI': 'Prince Edward Island', 'Cambridge MA': 'Cambridge, Massachusetts', 'Cambridge UK': 'Cambridge',
+        'Durham NC': 'Durham', 'Portland Maine': 'Portland, Maine', 'London Ontario': 'London, Ontario',
+        'Victoria BC': 'Victoria, BC', 'Washington State': 'Washington State', 'Koln': 'Cologne',
+        'St Johns': 'St John\u2019s', 'Bay Area': 'the Bay Area', 'East Coast': 'the East Coast',
+        'West Coast': 'the West Coast',
+    };
+
+    const THE = new Set(['AE', 'BS', 'DO', 'GB', 'NL', 'PH', 'US', 'MV', 'CD', 'CF', 'KM', 'MH', 'SB', 'VA']);
+
+    const regionName = (() => {
+        try { const dn = new Intl.DisplayNames(['en'], { type: 'region' }); return c => dn.of(c); }
+        catch (e) { return c => c; }
+    })();
+
+    function validZone(z) {
+        try { new Intl.DateTimeFormat('en', { timeZone: z }); return true; } catch (e) { return false; }
+    }
+
+    function cityOf(zone) { return zone.split('/').pop().replace(/_/g, ' '); }
+
+    // "Zürich", "St. John's", "saint paul" → "zurich", "st johns", "st paul"
+    function norm(s) {
+        return s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase()
+            .replace(/[.'’]/g, '').replace(/&/g, 'and').replace(/\bsaint\b/g, 'st')
+            .replace(/\s+/g, ' ').trim();
+    }
+
+    // normalised name → { zone, label, note? }; later entries win
+    const PLACES = new Map();
+    const put = (name, place) => { if (validZone(place.zone)) PLACES.set(norm(name), place); };
+
+    try {
+        for (const zone of Intl.supportedValuesOf('timeZone'))
+            if (zone.includes('/')) put(cityOf(zone), { zone, label: cityOf(zone) });
+    } catch (e) {}
+
+    const COUNTRY = {};
+    for (const entry of COUNTRIES.trim().split(/\s+/)) {
+        const [code, rest] = entry.split(':');
+        const zone = rest.replace('*', '');
+        // browsers list some zones by old names (Calcutta, Katmandu), so file the modern city too
+        put(cityOf(zone), { zone, label: cityOf(zone) });
+        const name = regionName(code);
+        const the = THE.has(code);
+        COUNTRY[code] = {
+            zone,
+            label: (the ? 'the ' : '') + name,
+            note: rest.endsWith('*') ? (the ? 'The ' : '') + name + ' spans several time zones; I’ve assumed '
+                + cityOf(zone) + '. Name a city if that’s wrong.' : null,
+        };
+    }
+
+    for (const block of REGIONS.trim().split(/\n\s*(?=[A-Z][\w/-]+:)/)) {
+        const [zone, list] = block.split(/:\s*/);
+        for (let name of list.split(/,\s*/)) {
+            name = name.trim();
+            const split = name.endsWith('*');
+            name = name.replace('*', '');
+            const kind = US_ZONES[zone] || cityOf(zone);
+            put(name, {
+                zone,
+                label: LABELS[name] || name,
+                note: split ? name + ' straddles a time zone line; I’ve assumed ' + kind + '. Name a city if that’s wrong.' : null,
+            });
+        }
+    }
+
+    // countries go in after cities, so "Singapore" or "Mexico" means the country
+    for (const [code, c] of Object.entries(COUNTRY)) {
+        put(code, c);
+        put(regionName(code), c);
+    }
+    for (const [alias, code] of Object.entries(COUNTRY_ALIASES)) if (COUNTRY[code]) put(alias, COUNTRY[code]);
+    for (const [name, [zone, label, note]] of Object.entries(AMBIGUOUS)) put(name, { zone, label, note });
+    // two-letter shorthands that people mean as places, not as the country with that code
+    put('la', { zone: 'America/Los_Angeles', label: 'Los Angeles' });
+    put('ny', { zone: 'America/New_York', label: 'New York' });
+    for (const [zone, [label, names]] of Object.entries(ABBREVIATIONS))
+        for (const n of names.split(' ')) put(n, { zone, label });
+
+    const HERE_PLACE = { zone: HERE, label: cityOf(HERE), here: true };
+
+    // null: nothing asked; undefined: asked for somewhere we've never heard of
+    function findPlace(s) {
+        s = norm(s).replace(/[?!,]+$/g, '');
+        if (!s) return null;
+        if (s === '@here') return HERE_PLACE;
+        if (PLACES.has(s)) return PLACES.get(s);
+        s = s.replace(/^the\s+/, '');
+        if (PLACES.has(s)) return PLACES.get(s);
+        // be forgiving of a half-typed name: "tok", "minn"
+        if (s.length >= 3) {
+            let best = null;
+            for (const [name, p] of PLACES)
+                if (name.startsWith(s) && (!best || name.length < best[0].length)) best = [name, p];
+            if (best) return best[1];
+        }
+        return undefined;
+    }
+
+    /* ---- reading the question ---- */
+
+    function parse(raw) {
+        let s = ' ' + raw.toLowerCase().replace(/[→⇒]|->|=>/g, ' to ').replace(/[?!]/g, ' ').replace(/\s+/g, ' ') + ' ';
+        s = s.replace(/\s(my time|my place|local time|your time|here|me|mine|local|home|you)(?=\s)/g, ' @here');
+
+        // which day
+        let days = 0;
+        s = s.replace(/\s(tomorrow|tmrw|tmw|today|yesterday)(?=\s)/, (_, d) => {
+            days = { today: 0, yesterday: -1 }[d] ?? 1;
+            return ' ';
+        });
+
+        // what time, and whether they think in am/pm
+        let time = null, h12 = null;
+        s = s.replace(/\s(?:at\s)?(noon|midday|midnight|now)(?=\s)/, (_, w) => {
+            if (w !== 'now') time = { h: w === 'midnight' ? 0 : 12, mi: 0 };
+            return ' ';
+        });
+        const re = /\s(?:at\s)?(\d{1,2})(?:[:.h]?(\d{2}))?\s?(a\.?m\.?|p\.?m\.?|a|p)?(?=\s)/;
+        const m = !time && s.match(re);
+        if (m) {
+            let h = +m[1];
+            const mi = m[2] ? +m[2] : 0;
+            if (m[3]) {
+                h12 = true;
+                h = h >= 1 && h <= 12 ? h % 12 + (m[3][0] === 'p' ? 12 : 0) : 99;
+            } else if (m[2]) h12 = false;
+            if (h > 23 || mi > 59) return { nonsense: m[0].trim() };
+            time = { h, mi };
+            s = s.replace(re, ' ');
+        }
+
+        // the chaff
+        s = s.replace(/\s(what'?s|whats|what|is it|is|it'?s|the time|time|o'?clock|please|currently|right)(?=\s)/g, ' ')
+             .replace(/\s+/g, ' ').trim()
+             .replace(/^(from|at)\s/, '');
+
+        // split into from and to: "SF in CZ", "GB to CZ", "in CZ", "SF, CZ"
+        let from, to;
+        const whole = s && PLACES.get(norm(s));
+        const conn = !whole && (s.match(/^(.*?)(?:^|\s)(?:in|to|into|vs|versus|and)\s(.*)$/) || s.match(/^(.*?),\s*(.*)$/));
+        if (conn) {
+            from = conn[1] ? findPlace(conn[1]) : HERE_PLACE;
+            to = conn[2] ? findPlace(conn[2]) : HERE_PLACE;
+            if (from === undefined) return { unknown: conn[1] };
+            if (to === undefined) return { unknown: conn[2] };
+        } else if (s) {
+            const one = whole || findPlace(s);
+            if (one) {
+                // "4pm CZ" is 4pm there, in my time; "UK time" is now, there
+                [from, to] = time ? [one, HERE_PLACE] : [HERE_PLACE, one];
+            } else {
+                // "SF CZ": try every split into two places
+                const words = s.split(' ');
+                for (let i = 1; i < words.length && !from; i++) {
+                    const a = findPlace(words.slice(0, i).join(' '));
+                    const b = findPlace(words.slice(i).join(' '));
+                    if (a && b) [from, to] = [a, b];
+                }
+                if (!from) return { unknown: s };
+            }
+        } else {
+            [from, to] = [HERE_PLACE, HERE_PLACE];
+        }
+        return { from, to, time, days, h12 };
+    }
+
+    /* ---- time zone arithmetic, with nothing but Intl ---- */
+
+    const fmtCache = {};
+    function parts(zone, t) {
+        const fmt = fmtCache[zone] = fmtCache[zone] || new Intl.DateTimeFormat('en-GB', {
+            timeZone: zone, hourCycle: 'h23', weekday: 'long',
+            year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric',
+        });
+        const p = {};
+        for (const { type, value } of fmt.formatToParts(t)) p[type] = value;
+        return { y: +p.year, mo: +p.month, d: +p.day, h: +p.hour % 24, mi: +p.minute, wd: p.weekday };
+    }
+
+    // minutes this zone is ahead of UTC at instant t
+    function offset(zone, t) {
+        const p = parts(zone, t);
+        return Math.round((Date.UTC(p.y, p.mo - 1, p.d, p.h, p.mi) - Math.floor(t / MIN) * MIN) / MIN);
+    }
+
+    // the instant at which the wall clock in `zone` reads this
+    function instantOf(zone, y, mo, d, h, mi) {
+        const wall = Date.UTC(y, mo - 1, d, h, mi);
+        let t = wall - offset(zone, wall) * MIN;
+        t = wall - offset(zone, t) * MIN; // second pass settles DST edges
+        return t;
+    }
+
+    const dayNumber = p => Date.UTC(p.y, p.mo - 1, p.d) / DAY;
+
+    /* ---- saying it ---- */
+
+    const defaultH12 = new Intl.DateTimeFormat(undefined, { hour: 'numeric' })
+        .resolvedOptions().hourCycle?.startsWith('h1') || false;
+
+    function clock(p, h12, big) {
+        const mm = String(p.mi).padStart(2, '0');
+        if (!h12) return String(p.h).padStart(2, '0') + ':' + mm;
+        const ap = p.h < 12 ? 'am' : 'pm';
+        return ((p.h + 11) % 12 + 1) + ':' + mm + (big ? '<small>' + ap + '</small>' : ' ' + ap);
+    }
+
+    function gap(mins) {
+        const a = Math.abs(mins), h = Math.floor(a / 60), m = a % 60;
+        const frac = { 0: '', 15: '¼', 30: '½', 45: '¾' }[m];
+        return (h || !frac ? h : '') + frac + (a === 60 ? ' hour ' : ' hours ') + (mins > 0 ? 'ahead of' : 'behind');
+    }
+
+    const inPlace = pl => pl.here ? 'here' : 'in <strong>' + pl.label + '</strong>';
+    const cap = s => s[0].toUpperCase() + s.slice(1);
+
+    const answerEl = document.getElementById('answer');
+    const qEl = document.getElementById('q');
+    let live = false;
+    let errTimer = null;
+
+    function render() {
+        clearTimeout(errTimer);
+        document.title = 'Meanwhile';
+        live = false;
+        const raw = qEl.value.trim();
+        if (!raw) return intro();
+
+        const q = parse(raw);
+        // wait until they've stopped typing before admitting defeat
+        const shrug = msg => { errTimer = setTimeout(() => showShrug(msg), 700); };
+        if (q.unknown) return shrug('I don’t know where “' + escape(q.unknown)
+            + '” is. A city, a country, or a code like CZ will do.');
+        if (q.nonsense) return shrug('“' + escape(q.nonsense) + '” isn’t a time on any clock I own.');
+
+        const { from, to } = q;
+        const h12 = q.h12 ?? defaultH12;
+        if (from.here && to.here && q.time)
+            return showShrug('That’s ' + clock(q.time, h12) + ' wherever you are. Where did you mean?');
+
+        let t;
+        if (q.time) {
+            const p = parts(from.zone, Date.now());
+            t = instantOf(from.zone, p.y, p.mo, p.d + q.days, q.time.h, q.time.mi);
+        } else {
+            t = Date.now() + q.days * DAY;
+            live = !q.days;
+        }
+
+        const fp = parts(from.zone, t), tp = parts(to.zone, t);
+        const rel = offset(to.zone, t) - offset(from.zone, t);
+        const shift = dayNumber(tp) - dayNumber(fp);
+        const dot = live ? '<span class="live-dot"></span>' : '';
+
+        let lead, tail;
+        if (!q.time && from.here) {
+            // "UK time": just tell me what it is there
+            lead = dot + (live ? 'Right now ' : 'This time ' + (q.days > 0 ? 'tomorrow ' : 'yesterday ')) + inPlace(to) + ' it’s';
+            tail = 'on ' + tp.wd + (to.here ? '.' : rel ? ', ' + gap(rel) + ' you.' : ', same as you.');
+        } else {
+            lead = live
+                ? dot + 'Right now it’s <strong>' + clock(fp, h12) + '</strong> ' + inPlace(from) + ', so'
+                : 'When it’s <strong>' + clock(fp, h12) + '</strong> on ' + fp.wd + ' ' + inPlace(from) + ', it’s';
+            tail = (shift ? 'on <strong>' + tp.wd + '</strong> ' : '') + inPlace(to) + '.';
+        }
+
+        const aside = [];
+        if (from.zone !== to.zone && !rel) aside.push('Same time in both.');
+        else if (rel && !(!q.time && from.here)) {
+            const subject = to.here ? 'You’re' : cap(to.label) + ' is';
+            aside.push(subject + ' ' + gap(rel) + ' ' + (from.here ? 'you' : from.label) + '.');
+        }
+        for (const pl of new Set([from, to])) if (pl.note) aside.push(pl.note);
+
+        document.title = clock(tp, h12) + ' ' + (to.here ? 'here' : 'in ' + to.label) + ' · Meanwhile';
+        show(lead, clock(tp, h12, true), tail, aside.join(' '), tp);
+    }
+
+    function intro() {
+        live = true;
+        const p = parts(HERE, Date.now());
+        show('<span class="live-dot"></span>Right now, ' + escape(cityOf(HERE)) + ' time, it’s',
+            clock(p, defaultH12, true), 'Ask about anywhere else.', '', p);
+    }
+
+    const slot = id => document.getElementById(id);
+    const orbitEl = slot('orbit'), skyEl = slot('sky'), timeEl = slot('time');
+    let lastAngle = null;
+
+    function show(lead, time, tail, aside, p) {
+        answerEl.classList.remove('shrugging');
+        slot('lead').innerHTML = lead;
+        slot('tail').innerHTML = tail;
+        slot('aside').innerHTML = aside;
+        if (timeEl.innerHTML !== time) {
+            timeEl.innerHTML = time;
+            // a new answer settles into place; the live clock ticking over doesn't
+            if (!live) {
+                timeEl.classList.remove('fresh');
+                void timeEl.offsetWidth;
+                timeEl.classList.add('fresh');
+            }
+        }
+        setSky(p.h + p.mi / 60);
+    }
+
+    // sun crosses the arc from 6am to 6pm, the moon from 6pm to 6am
+    function setSky(hour) {
+        const night = hour < 6 || hour >= 18;
+        const angle = -90 + 180 * (((hour - 6 + 24) % 12) / 12);
+        // crossing dawn or dusk swaps sun for moon at the far horizon, rather than sweeping back
+        orbitEl.classList.toggle('jump', lastAngle !== null && Math.abs(angle - lastAngle) > 120);
+        orbitEl.style.transform = 'rotate(' + angle + 'deg)';
+        skyEl.classList.toggle('night', night);
+        lastAngle = angle;
+    }
+
+    function showShrug(msg) {
+        answerEl.classList.add('shrugging');
+        slot('shrug').innerHTML = msg;
+    }
+
+    function escape(s) {
+        return s.replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
+    }
+
+    /* ---- wiring ---- */
+
+    // the question lives in the URL, so an answer can be sent to someone
+    function update() {
+        render();
+        const v = qEl.value.trim();
+        history.replaceState(null, '', v ? '?q=' + encodeURIComponent(v) : location.pathname);
+    }
+
+    qEl.addEventListener('input', update);
+    for (const b of document.querySelectorAll('.try button'))
+        b.addEventListener('click', () => { qEl.value = b.textContent; update(); qEl.focus(); });
+
+    const template = location.origin + location.pathname + '?q=%s';
+    document.getElementById('template').textContent = template;
+    document.getElementById('howto').addEventListener('click', e => {
+        e.preventDefault();
+        const panel = document.getElementById('howtoPanel');
+        panel.hidden = !panel.hidden;
+        if (!panel.hidden) panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    });
+    document.getElementById('copyTemplate').dataset.copy = template;
+    for (const b of document.querySelectorAll('[data-copy]'))
+        b.addEventListener('click', () => {
+            navigator.clipboard?.writeText(b.dataset.copy).then(() => {
+                b.textContent = 'copied';
+                setTimeout(() => { b.textContent = 'copy'; }, 1500);
+            });
+        });
+
+    const SUGGESTIONS = ['4pm SF in CZ', 'UK time', 'noon Tokyo in London', '9am PT in CET',
+        'Minnesota to Berlin', 'time in Sydney', '6:30pm NYC in Delhi'];
+    let suggestion = 0;
+    setInterval(() => {
+        if (qEl.value) return;
+        suggestion = (suggestion + 1) % SUGGESTIONS.length;
+        qEl.placeholder = SUGGESTIONS[suggestion];
+    }, 3200);
+
+    qEl.value = new URLSearchParams(location.search).get('q') || '';
+    render();
+    if (!qEl.value) qEl.focus();
+
+    setInterval(() => { if (live) render(); }, 5000);
+</script>
